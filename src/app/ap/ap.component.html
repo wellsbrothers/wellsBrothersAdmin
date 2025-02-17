@@ -1,0 +1,268 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-c pt-0 pb-0">
+    <a class="navbar-brand" href="#">
+      <img src="assets/images/logo-white.svg" class="img-responsive" alt="">
+    </a>
+    <button class="navbar-toggler text-light">
+      <svg width="1em" height="1em" (click)="showHeadeDropdown = !showHeadeDropdown" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+      </svg>
+    </button>
+    <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarNavDropdown" [ngClass]="showHeadeDropdown ? 'show' : ''">
+      <ul class="navbar-nav ml-auto" >
+        <li class="nav-item">
+          <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/ap/index']">AP</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/ap/tbp']">To Be Paid</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/ap/paid']">Paid</a>
+        </li>
+        <li class="nav-item dropdown" [ngClass]="showHeadeDropdown ? 'show' : ''">
+          <a class="nav-link text-light dropdown-toggle d-user" href="javascript:void(0)" (click)="showHeadeDropdown = !showHeadeDropdown">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu" [ngClass]="showHeadeDropdown ? 'show' : ''" id="userDropdown" >
+            <a class="dropdown-item" [routerLinkActive]="['active']"  [routerLink]="['/dashboard']">Dashboard</a>
+            <a class="dropdown-item" [routerLinkActive]="['active']"  [routerLink]="['/trackboard']" *ngIf="showTrackBoard">Trackboard</a>
+            <a class="dropdown-item" [routerLinkActive]="['active']"  [routerLink]="['/admin/my-page']"  *ngIf="role !== 2">My Page</a>
+            <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Log Out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button (click)="showHeadFilter = !showHeadFilter" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown1" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-filter-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM3.5 5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zM5 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    <div class="collapse navbar-collapse" [ngClass]="showHeadFilter ? 'show' : ''" [ngStyle]="{'display' : showHeadFilter ? 'block': 'none'}" id="navbarNavDropdown1">
+      <div class="row w-100 no-margin">
+        <div class="col-12  p-2 card">
+          <div class="row w-100 no-margin">
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="name">Find</label>
+                <input type="number" id="name" class="form-control" name="name" [(ngModel)]="search.text">
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" class="form-control" name="type"  [(ngModel)]="search.type">
+                  <option label="Search By" value="" selected="selected" selected disabled>Search By</option>
+                  <option label="Load #" value="num" selected="selected">Load #</option>
+                  <option label="Broker Load #" value="broker_load">Broker Load #</option>
+                  <option label="Check #" value="check">Check #</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="carrier_id">Carrier</label>
+                <ng-select  id="carrier_id" name="carrier_id" class="custom" [(ngModel)]="search.carrierId" (search) = "searchCarrierFunc($event)">
+                  <ng-option *ngFor="let carrier of carriers" [value]="carrier._id">{{carrier.companyName}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12" *ngIf="role !== 2">
+              <div class="form-group">
+                <label for="users">Dispatcher</label>
+                <select id="users" class="form-control" name="users"  [(ngModel)]="search.adminId">
+                  <option value="" selected>All</option>
+                  <option *ngFor="let admin of admins" value="{{admin._id}}" >{{admin.username}} - {{admin.note}}</option>
+                </select>
+              </div>
+            </div>
+            <div [ngClass]="role === 2 ? 'col-xl-3' : 'col-xl-1'" class=" col-lg-2 col-md-12">
+              <div class="form-group">
+                <label for="payed">Payed</label>
+                <select id="payed" class="form-control" name="payed"  [(ngModel)]="search.payed">
+                  <option value="0">Checkouted</option>
+                  <option value="1">ToBePayed</option>
+                  <option value="2">Paid</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-6  col-sm-6  col-6">
+              <div class="form-group">
+                <label for="dateFrom">Date From</label>
+                <input type="date" placeholder="mm/dd/yyyy" id="dateFrom" class="form-control" name="dateFrom" [(ngModel)]="search.dateMin">
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-6  col-sm-6  col-6">
+              <div class="form-group">
+                <label for="dateTo">Date To</label>
+                <input type="date" placeholder="mm/dd/yyyy" id="dateTo" class="form-control" name="dateTo" [(ngModel)]="search.dateMax">
+              </div>
+            </div>
+            <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+              <div class="form-group pt-20">
+                <button class="btn btn-secondary" (click)="getLoads()">Search</button>
+              </div>
+            </div>
+            <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+              <div class="form-group pt-20">
+                <button class="btn btn-secondary" (click)="page = 1; setSearchFilter(); getLoads()">Reset Filter</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<section>
+  <div class="container-fluid mt-2">
+
+    <div class="row bg-white no-margin p-3">
+      <div class="col-12 pb-1">
+        <h3><b>AP</b></h3>
+      </div>
+      <div class="col-12 pb-1">
+        <div class="row">
+          <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 table-responsive">
+        <table class="table table-bordered" *ngIf="loads && loads.length > 0">
+          <thead>
+          <tr class="bg-secondary-light-grey">
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'num'; sort(0)" [ngClass]="searchTD[0] ? 'asc' : 'desc'">Load#
+            </th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'admin.username'; sort(1)" [ngClass]="searchTD[1] ? 'asc' : 'desc'">Broker Name
+            </th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'branch.name'; sort(2)" [ngClass]="searchTD[2] ? 'asc' : 'desc'">FN / Carrier Name
+            </th>
+            <th scope="col" class="th  fs-11">
+              Percentage
+            </th>
+            <th scope="col" class="th  fs-11">
+              Amount
+            </th>
+            <th scope="col" class="th  fs-11">
+              Process Date
+            </th>
+            <th scope="col" class="th  fs-11">
+              End Date
+            </th>
+            <th scope="col" class="th  fs-11">
+              WIRE / ACH / CHECK
+            </th>
+            <th scope="col" class="th  fs-11">
+              Checkout
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let l of loads; let i = index" 
+          [ngClass]="l.payedStatus === 1 ? 'bg-to-be-paid' : l.payedStatus === 2 ? 'bg-paid' : ''">
+            <td scope="row" [ngClass]="l.tonu ? 'tonu-bg' : ''">
+                <b><u class=" fs-11 cursor-pointer">{{l.num}}</u></b>
+            </td>
+            <td class=" fs-11">
+              {{l.broker[0].name}}
+            </td>
+            <td class=" fs-11">
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input *ngIf="l.factory && l.factory[0]" type="radio" class="btn-check" name="btnradio_{{i}}" id="btnradio1_{{i}}"
+                      [(ngModel)]="l.payToFactoryOrCarrier"
+                       [value]="l.factory[0]._id" 
+                       [checked]="l.factory || l.factory[0]._id === l.payToFactoryOrCarrier">
+                <label *ngIf="l.factory && l.factory[0]" class="btn btn-outline-primary btn-sm" for="btnradio1_{{i}}"
+                (click)="l.payToFactoryOrCarrier = l.factory[0]._id">{{l.factory[0].name}}</label>
+
+                <input type="radio" class="btn-check" name="btnradio_{{i}}" id="btnradio2_{{i}}"
+                      [(ngModel)]="l.payToFactoryOrCarrier"
+                       [value]="l.carrier._id" 
+                       [checked]="!l.factory || l.carrier._id === l.payToFactoryOrCarrier">
+                <label class="btn btn-outline-primary btn-sm" for="btnradio2_{{i}}"
+                (click)="l.payToFactoryOrCarrier = l.carrier._id">{{l.carrier.companyName}}</label>
+              </div>
+            </td>
+            <td class=" fs-11">
+              <input type="number" class="btn-check" name="radio" id="radio" [(ngModel)]="l.percent">
+            </td>
+            <td class=" fs-11">
+              <span>{{l.carrier_fee - ((l.carrier_fee * l.percent) / 100)}}</span>
+              <input type="hidden" disabled class="form-control hide" [(ngModel)]="l.amountOfPerncent"
+                     placeholder="{{l.carrier_fee - ((l.carrier_fee * l.percent) / 100)}}">
+            </td>
+            <td class=" fs-11">
+              <input type="date" class="form-control"
+              [(ngModel)]="l.process_date" 
+              name="payedDate">
+            </td>
+            <td class=" fs-11">
+              <input type="date" class="form-control"
+              [(ngModel)]="l.end_date"  disabled 
+              name="payedDate">
+            </td>
+            <td class=" fs-11">
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="paymentType_{{i}}" id="paymentType1_{{i}}" 
+                  [(ngModel)]="l.payedType" [value]="0">
+                  <label class="btn btn-outline-secondary btn-sm" for="paymentType1_{{i}}">WIRE</label>
+  
+                  <input type="radio" class="btn-check" name="paymentType_{{i}}" id="paymentType2_{{i}}" 
+                  [(ngModel)]="l.payedType" [value]="1">
+                  <label class="btn btn-outline-success btn-sm" for="paymentType2_{{i}}">ACH</label>
+  
+                  <input type="radio" class="btn-check" name="paymentType_{{i}}" id="paymentType3_{{i}}" 
+                  [(ngModel)]="l.payedType" [value]="2">
+                  <label class="btn btn-outline-primary btn-sm" for="paymentType3_{{i}}">CHECK</label>
+                </div>
+              </div>
+            </td>
+            <td class="text-primary fs-11">
+              <button class="btn btn-sm btn-success" (click)="save(l, i)">Save</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div class="col-xl-10 col-lg-10 col-md-9 col-xs-9 col-9">
+            <div class="row no-margin justify-content-end" *ngIf="total > limit">
+              <app-pagination
+                [count]="total"
+                [page]="page"
+                [perPage]="limit"
+                [pagesToShow]="5"
+                (goPrev)="prev()"
+                (goNext)="next()"
+                (goPage)="currentpage($event)">
+              </app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

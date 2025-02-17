@@ -1,0 +1,193 @@
+<div class="carrier-create-form" [ngStyle]="{'display' : addCarrier ? 'block': 'none'}">
+  <div class="shiper-reciver-content" *ngIf="carrier">
+    <div class="row no-margin">
+      <div class="col-8">
+        <h4 class="text-light  pt-3 pb-3 no-margin">Create Carriere</h4>
+      </div>
+      <div class="col-4 text-right text-light pt-3 pb-3">
+        <i class="fas fa-times" id="carrier-reciver-close" (click)="closeModal()"></i>
+      </div>
+    </div>
+    <p [ngClass]="errorMessageCreate ? 'text-danger' : 'text-success'">
+      <b>
+        {{createResponseMessage}}
+      </b>
+    </p>
+    <div class="row w-100 no-margin" id="addCarrierForm">
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierfullName" [ngClass]="validateError.companyName ? 'text-danger' : ''">Full Name</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierfullName" class="form-control" name="carrierfullName" [(ngModel)]="carrier.companyName">
+              <p class="text-danger" *ngIf="validateError.companyName">Full Name is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierDotNumber" [ngClass]="validateError.dotNumber ? 'text-danger' : ''">Dot Number</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierDotNumber" class="form-control" name="carrierDotNumber" [(ngModel)]="carrier.dotNumber">
+              <p class="text-danger" *ngIf="validateError.dotNumber">Dot Number is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierMCNo" [ngClass]="validateError.mc ? 'text-danger' : ''">MCNo</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierMCNo" class="form-control" name="carrierMCNo" [(ngModel)]="carrier.mc">
+              <p class="text-danger" *ngIf="validateError.mc">MCNo is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierCompanyMainEmail" [ngClass]="validateError.companyEmail ? 'text-danger' : ''">Company Main Email</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierCompanyMainEmail" class="form-control" name="carrierCompanyMainEmail" [(ngModel)]="carrier.companyEmail">
+              <p class="text-danger" *ngIf="validateError.companyEmail">Company Main Email is required and must be valid email</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierPhone" [ngClass]="validateError.phone ? 'text-danger' : ''">Phone</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierPhone" class="form-control" name="carrierPhone" [(ngModel)]="carrier.phone">
+              <p class="text-danger" *ngIf="validateError.phone">Phone is required and must be only numbers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierFax">Fax</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierFax" class="form-control" name="carrierFax" [(ngModel)]="carrier.fax">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierTrack" [ngClass]="validateError.track ? 'text-danger' : ''">Company Track</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierTrack" class="form-control" name="carrierTrack" [(ngModel)]="carrier.track">
+              <p class="text-danger" *ngIf="validateError.track">Company Track is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierTrailer" [ngClass]="validateError.trailer ? 'text-danger' : ''">Company Trailer</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierTrailer" class="form-control" name="carrierTrailer" [(ngModel)]="carrier.trailer">
+              <p class="text-danger" *ngIf="validateError.trailer">Company Trailer is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierDriver" [ngClass]="validateError.driver ? 'text-danger' : ''">Company Driver</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierDriver" class="form-control" name="carrierDriver" [(ngModel)]="carrier.driver">
+              <p class="text-danger" *ngIf="validateError.driver">Company Driver is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-8 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrieraddress" [ngClass]="validateError.address.address ? 'text-danger' : ''">Address</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrieraddress" class="form-control" name="carrieraddress" [(ngModel)]="carrier.address.address">
+              <p class="text-danger" *ngIf="validateError.address.address">Address is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierstate" [ngClass]="validateError.address.state ? 'text-danger' : ''">State</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <select id="carrierstate" class="form-control" name="carrierstate" [(ngModel)]="carrier.address.state">
+                <option *ngFor="let state of states" value="{{state.abbreviation}}">{{state.name}}</option>
+              </select>
+              <p class="text-danger" *ngIf="validateError.address.state">State is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-8 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carriercity" [ngClass]="validateError.address.city ? 'text-danger' : ''">City</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carriercity" class="form-control" name="carriercity" [(ngModel)]="carrier.address.city">
+              <p class="text-danger" *ngIf="validateError.address.city">City is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <label for="carrierzip" [ngClass]="validateError.address.zip ? 'text-danger' : ''">Postal/Zip</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="carrierzip" class="form-control" name="carrierzip" [(ngModel)]="carrier.address.zip">
+              <p class="text-danger" *ngIf="validateError.address.zip">Postal/Zip is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12  text-right pt-2 pb-2">
+        <button class="btn btn-danger mr-2" (click)="closeModal()">Close</button>
+        <button class="btn btn-primary" (click)="createCarrier()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

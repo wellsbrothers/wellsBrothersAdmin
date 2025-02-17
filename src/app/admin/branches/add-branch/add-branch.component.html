@@ -1,0 +1,101 @@
+<section class="row w-100 no-margin">
+  <div class="col-12 no-padding">
+    <div class="row pt-5 pb-5 no-margin">
+      <div class="col-6">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active fs-20" aria-current="page" [routerLink]="['/admin/branches']">Branches</li>
+            <li class="breadcrumb-item fs-20" aria-current="page">Add Branche</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row w-100 no-margin"  id="addBranchForm">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="name" [ngClass]="validateError.name ? 'text-danger' : ''">Name</label>
+              <input type="text" class="form-control" name="name" id="name" [(ngModel)]="branche.name">
+              <p class="text-danger" *ngIf="validateError.name">Name is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="mcNumber" [ngClass]="validateError.mc ? 'text-danger' : ''">MC Number</label>
+              <input type="text" class="form-control" name="mcNumber" id="mcNumber" [(ngModel)]="branche.mc">
+              <p class="text-danger" *ngIf="validateError.mc">MC number is required</p>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header">
+                <h4>Address</h4>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="address1" [ngClass]="validateError.address.address ? 'text-danger' : ''">Address</label>
+                  <input type="text" class="form-control" name="address" id="address1" [(ngModel)]="branche.address.address">
+                  <p class="text-danger" *ngIf="validateError.address.address">Address is required!</p>
+                </div>
+                <div class="form-group">
+                  <label for="city2" [ngClass]="validateError.address.city ? 'text-danger' : ''">City</label>
+                  <input type="text" class="form-control" name="city" id="city2" [(ngModel)]="branche.address.city">
+                  <p class="text-danger" *ngIf="validateError.address.city">Address city is required!</p>
+                </div>
+                <div class="form-group">
+                  <label for="zip2" [ngClass]="validateError.address.zip ? 'text-danger' : ''">Zip</label>
+                  <input type="text" class="form-control" name="zip" id="zip2" [(ngModel)]="branche.address.zip">
+                  <p class="text-danger" *ngIf="validateError.address.zip">Address zip is required!</p>
+                </div>
+                <div class="form-group">
+                  <label for="state" [ngClass]="validateError.address.state ? 'text-danger' : ''">State</label>
+                  <select class="form-control" name="state" id="state"  [(ngModel)]="branche.address.state">
+                    <option *ngFor="let state of states" value="{{state.abbreviation}}">{{state.name}}</option>
+                  </select>
+                  <p class="text-danger" *ngIf="validateError.address.state">Address state is required!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card mb-2" *ngFor="let p of branche.phones; let i = index">
+              <div class="card-header">
+                <div class="row w-100 no-margin">
+                  <div class="col-6">
+                    <b class="fs-16">Phone {{i+1}}</b>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button class="btn btn-success"  (click)="addPhone()">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn btn-danger ml-2" *ngIf="branche.phones.length > 1"  (click)="removePhone(i)">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="phone5" [ngClass]="validateError.phones[i] ? 'text-danger' : ''">Phone {{i+1}}</label>
+                  <input type="text" class="form-control" name="phone" id="phone5"  [(ngModel)]="p.phoneNumber">
+                  <p class="text-danger" *ngIf="validateError.phones[i]">Phone number is required and must be only numbers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12  text-right">
+            <button class="btn btn-primary" (click)="addBranche()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

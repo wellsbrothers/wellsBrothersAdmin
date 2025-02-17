@@ -1,0 +1,13 @@
+<router-outlet></router-outlet>
+
+<app-notification [notShow]="notShow"
+                  [notError]="notError"
+                  [notMessage]="notMessage"></app-notification>
+
+<div class="modal fade bd-example-modal-lg" [ngClass]="loader ? 'show' : ''" [ngStyle]="{'display' : loader ? 'block': 'none'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 48px">
+      <img src="../assets/loader.gif" class="w-100" alt="">
+    </div>
+  </div>
+</div>

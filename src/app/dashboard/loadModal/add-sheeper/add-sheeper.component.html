@@ -1,0 +1,104 @@
+<div class="shiper-reciver" [ngStyle]="{'display' : addSheeperModal ? 'block': 'none'}">
+  <div *ngIf="sheeper" class="shiper-reciver-content">
+    <div class="row no-margin">
+      <div class="col-8">
+        <h4 class="text-light  pt-3 pb-3 no-margin">Create Shipper</h4>
+      </div>
+      <div class="col-4 text-right text-light pt-3 pb-3">
+        <i class="fas fa-times" id="shiper-reciver-close"  (click)="closeModal()"></i>
+      </div>
+    </div>
+    <p [ngClass]="errorMessageCreate ? 'text-danger' : 'text-success'">
+      <b>
+        {{createResponseMessage}}
+      </b>
+    </p>
+    <div class="row w-100 no-margin" id="addSheeperForm">
+      <div class="col-12">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="fullName"  [ngClass]="validateError.name ? 'text-danger' : ''">Full Name</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="fullName6" class="form-control" name="fullName" [(ngModel)]="sheeper.name">
+              <p class="text-danger" *ngIf="validateError.name">Name is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="address"  [ngClass]="validateError.address.address ? 'text-danger' : ''">Address</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="address11" class="form-control" name="address" [(ngModel)]="sheeper.address.address">
+              <p class="text-danger" *ngIf="validateError.address.address">Address is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="state"  [ngClass]="validateError.address.state ? 'text-danger' : ''">State</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <select id="state" class="form-control" name="state" [(ngModel)]="sheeper.address.state">
+                <option *ngFor="let state of states" value="{{state.abbreviation}}">{{state.name}}</option>
+              </select>
+              <p class="text-danger" *ngIf="validateError.address.state">State is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="city"  [ngClass]="validateError.address.city ? 'text-danger' : ''">City</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="city11" class="form-control" name="city" [(ngModel)]="sheeper.address.city">
+              <p class="text-danger" *ngIf="validateError.address.city">City is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="zip"  [ngClass]="validateError.address.zip ? 'text-danger' : ''">Postal/Zip</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="zip11" class="form-control" name="zip" [(ngModel)]="sheeper.address.zip">
+              <p class="text-danger" *ngIf="validateError.address.zip">Postal/Zip is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card mb-2">
+          <div class="card-header">
+            <label for="phone"  [ngClass]="validateError.phone ? 'text-danger' : ''">Phone</label>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <input type="text" id="phone22" class="form-control" name="phone" [(ngModel)]="sheeper.phone">
+              <p class="text-danger" *ngIf="validateError.phone">Phone is required and must be numbers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 text-right pt-2 pb-2">
+        <button class="btn btn-danger mr-2" (click)="closeModal()">Close</button>
+        <button class="btn btn-primary" (click)="createSheeper()">Save</button>
+      </div>
+    </div>
+
+  </div>
+</div>

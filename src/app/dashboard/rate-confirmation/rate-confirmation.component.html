@@ -1,0 +1,409 @@
+<div style="padding: 25px 25px; font-family: 'Calibri'; zoom: 0.55;" *ngIf="load && company && company.length > 0">
+
+  <div style="width: 100%; background-color: #cecece; margin-top: 30px; padding: 5px; display: table;">
+    <div style="width: 49%; display: table-cell;">
+      <div style="display: table; width: 100%;">
+        <div style="width: 25%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            <b style="font-size: 14px;">Carrier:</b>
+          </p>  
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            <b style="font-size: 14px;">MC:</b>
+          </p>
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            <b style="font-size: 14px;">Phone:</b>
+          </p>
+    
+        </div>
+        <div style="width: 74%; display: table-cell;" *ngIf="load.carrier">
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> {{load.carrier[0].companyName}}</p>  
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> {{load.carrier[0].mc}}</p>
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> {{load.carrier[0].phone}}</p>
+    
+        </div>
+      </div>
+
+    </div>
+    <div style="width: 49%; display: table-cell; padding-left: 10px;">
+      <div style="width: 25%; display: inline-block;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          <b style="font-size: 14px;">Booked With:</b>
+        </p>
+      </div>
+      <div style="width: 74%; display: inline-block;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> {{load.bookedWidth}}</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px; padding: 5px">Our Contract Carrier Agreement is amended as follows:</p>
+
+  
+
+  <div style="width: 100%; padding: 5px; padding-top: 25px"  *ngFor="let sheep of load.sheeper; let i = index">
+    <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px;"><b>Pick Up {{i + 1}}</b></p>
+    <div style="page-break-after:always; display: table;" *ngIf="sheep && (i !== 0 && i % 5 === 0)">
+      <div style="width: 49%; display: table-cell;">
+        <div style="width: 100%; display: table;">
+          <!-- <div style="width: 25%; display: table-cell;"> -->
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Name:</span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">
+                {{getSheeprName(sheep.sheeper_id) ? getSheeprName(sheep.sheeper_id).name: '-'}}
+              </b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Address: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.address}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Phone: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.phone}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Notes: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.note}}</b>
+              </span>
+            </p>
+          <!-- </div> -->
+          <!-- <div style="width: 74%; display: table-cell;">
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+              
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+              
+            </p>
+          </div> -->
+        </div>
+        
+  
+      </div>
+      <div style="width: 49%; display: table-cell; padding-left: 10px;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          Pick Up time and date:
+        </p>
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"><b style="font-size: 14px;">{{sheep.date}} - {{sheep.time}}</b></p>
+      </div>
+    </div>
+    <div style="display: table;" *ngIf="sheep && (i === 0 || (i !== 0 && i % 5 !== 0))">
+      <div style="width: 49%; display: table-cell;">
+        <div style="width: 100%; display: table;">
+          <!-- <div style="width: 25%; display: table-cell;"> -->
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Name:</span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">
+                {{getSheeprName(sheep.sheeper_id) ? getSheeprName(sheep.sheeper_id).name: '-'}}
+              </b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Address: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.address}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Phone: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.phone}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;">   Notes: </span>
+              <span style="display: table-cell; width: 74%;">
+              <b style="font-size: 14px;">{{sheep.note}}</b>
+              </span>
+            </p>
+          <!-- </div>
+          <div style="width: 74%; display: table-cell;">
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+              <b style="font-size: 14px;">
+                {{getSheeprName(sheep.sheeper_id) ? getSheeprName(sheep.sheeper_id).name: '-'}}
+              </b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <b style="font-size: 14px;">{{sheep.address}}</b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <b style="font-size: 14px;">{{sheep.phone}}</b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+              <b style="font-size: 14px;">{{sheep.note}}</b>
+            </p>
+          </div> -->
+        </div>
+        
+  
+      </div>
+      <div style="width: 49%; display: table-cell; padding-left: 10px;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          Pick Up time and date:
+        </p>
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"><b style="font-size: 14px;">{{sheep.date}} - {{sheep.time}}</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 100%; margin-top: 30px; padding: 5px">
+    <hr>
+  </div>
+
+
+    <!-- break page after 5 -->
+  <div style="width: 100%; padding: 5px; padding-top: 25px"  *ngFor="let cons of load.consignee; let i = index">
+    <p style=" display: flex; font-size: 14px; margin-top: 3px; margin-bottom: 3px;">
+      <b style="font-size: 14px;">Drop Off {{i + 1}}</b>
+    </p>
+    
+    <div style="page-break-after: always;  display: table;" *ngIf="(load.sheeper.length < 5 && ((load.sheeper.length - 5 + i + 1) % 5 === 0 )) || (load.sheeper.length >= 5 && (load.sheeper.length % 5 === 0 || ( load.sheeper.length - 5 + i + 1) % 5 === 0 ))">
+      <div style="width: 49%; display: table-cell;">
+        <div style="width: 100%; display: table;">
+          <!-- <div style="width: 25%; display: table-cell;"> -->
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Name: </span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{getConsName(cons.consignee_id) ? getConsName(cons.consignee_id).name : '-'}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Address:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.address}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Phone:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.phone}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Notes:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.note}}</b>
+              </span>
+            </p>
+          <!-- </div>
+          <div style="width: 74%; display: table-cell">
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            </p>
+          </div> -->
+        </div>
+      </div>
+      <div style="width: 49%; display: table-cell; padding-left: 10px;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          Pick Up time and date:
+        </p>
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          <b>{{cons.date}} - {{cons.time}}</b>
+        </p>
+      </div>
+    </div>
+    <div style="display: table;" *ngIf="(load.sheeper.length < 5 && ((load.sheeper.length - 5 + i + 1) % 5 !== 0 )) || (load.sheeper.length >= 5 && (load.sheeper.length % 5 !== 0 || ( load.sheeper.length - 5 + i + 1) % 5 !== 0 ))">
+      <div style="width: 49%; display: table-cell;">
+        <div style="width: 100%; display: table;">
+          <!-- <div style="width: 25%; display: table-cell;"> -->
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Name: </span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{getConsName(cons.consignee_id) ? getConsName(cons.consignee_id).name : '-'}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Address:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.address}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Phone:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.phone}}</b>
+              </span>
+            </p>
+            <p style="display: table; width: 100%; font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <span style="display: table-cell; width: 25%;"> Notes:</span>
+              <span style="display: table-cell; width: 74%;">
+                <b style="font-size: 14px;">{{cons.note}}</b>
+              </span>
+            </p>
+          <!-- </div>
+          <div style="width: 74%; display: table-cell">
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"> 
+              <b style="font-size: 14px;">{{getConsName(cons.consignee_id) ? getConsName(cons.consignee_id).name : '-'}}</b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <b style="font-size: 14px;">{{cons.address}}</b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <b style="font-size: 14px;">{{cons.phone}}</b>
+            </p>
+            <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+              <b style="font-size: 14px;">{{cons.note}}</b>
+            </p>
+          </div> -->
+        </div>
+      </div>
+      <div style="width: 49%; display: table-cell; padding-left: 10px;">
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          Pick Up time and date:
+        </p>
+        <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+          <b>{{cons.date}} - {{cons.time}}</b>
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div style="width: 100%; margin-top: 30px; padding: 5px">
+    <hr>
+  </div>
+
+
+  <div style="width: 100%; margin-top: 30px; padding: 5px;; padding-top: 25px; display: table;">
+    
+    <div style="width: 49%; display: table-cell">
+      <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"><b>Load Information</b></p>
+
+      <div style="width: 100%; display: table;">
+        <div style="width: 25%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 5px; margin-bottom: 5px">
+            Truck Type:
+          </p>
+        </div>
+        <div style="width: 74%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 5px; margin-bottom: 5px">
+            <b>{{load.equipment}}</b>
+          </p>
+        </div>
+      </div>
+      <div style="width: 100%; display: table;">
+        <div style="width: 25%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 5px; margin-bottom: 5px">
+            Notes:
+          </p>
+        </div>
+        <div style="width: 74%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 5px; margin-bottom: 5px">
+            <b>{{load.loadNote}}</b>
+          </p>
+        </div>
+      </div>
+      
+    </div>
+    <div style="width: 49%; display: table-cell; padding-left: 10px;">
+      <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px"><b>Load Rate</b></p>
+
+      <div style="width: 100%; display: table;" *ngIf="load.line_houles && load.line_houles.length">
+        <div style="width: 25%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            Line Haul:
+          </p>
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px" *ngFor="let lineHaul of load.line_houles; let i = index">
+            {{lineHaul.note}}
+          </p>
+        </div>
+        <div style="width: 74%; display: table-cell;">
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">
+            <b style="font-size: 14px;">{{calculatedLinehaules()}}</b>
+          </p>
+          <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px" *ngFor="let lineHaul of load.line_houles; let i = index">
+            <b style="font-size: 14px;">{{lineHaul.price}}</b>
+          </p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- <div style="page-break-before: always"></div> -->
+  <div style="page-break-before: always; width: 100%; margin-top: 80px; padding: 25px 5px">
+    <p style="font-size: 10px; margin-top: 3px; margin-bottom: 3px"  [innerHTML]="company[0].pdf_note">
+
+    </p>
+
+
+    <p style="font-size: 16px;">Agreement</p>
+
+    <p style="font-size: 16px;">
+      Please sign and Email with your Invoice and a signed BOL within 72 hours to Accounts Payable at 
+      <a href="mailto:{{company[0].email}}?subject=feedback">{{company[0].email}}</a>
+    </p>
+
+    <p style="font-size: 16px;">
+      By accepting the quote, you agree to Wells Brothers inc. Terms and Conditions.
+    </p>
+    
+  </div>
+
+  <div style="width: 100%; margin-top: 30px; padding: 5px; display: flex;">
+    <div style="width: 49%; display: inline-block;">
+      <p style="margin-top: 3px; margin-bottom: 3px">______________________________________</p>
+      <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">Signature</p>
+    </div>
+    <div style="width: 49%; display: inline-block;">
+      <p style="margin-top: 3px; margin-bottom: 3px">          _______________________________</p>
+      <p style="font-size: 14px; margin-top: 3px; margin-bottom: 3px">Date</p>
+    </div>
+    
+  </div>
+
+  <div style="width: 100%; margin-top: 30px; padding: 5px; display: table;">
+    <div style="width: 49%; display: table-cell;">
+      <p style="font-size: 10px; margin-top: 3px; margin-bottom: 3px"   [innerHTML]="company[0].pdf_note2">
+        <!-- Wells Brothers Billing Information<br>
+        Each of the below required documents should list the Wells Brothers load number, as noted on this load confirmation sheet(s)<br>
+
+        BOL: Original Bill of Lading(s)<br>
+        INVOICE: Your company’s invoice showing the confirmed<br>
+        rate as listed on the load confirmation sheet(s)<br>
+
+        MISC: Lumper receipts, packing slips, and any additional
+        shipping documents (as applicable)<br>
+
+        RATE CON: Our signed load confirmation sheet(s) that
+        initiated this transaction with our Wells Brothers agent. -->
+
+      </p>
+    </div>
+
+    <div style="width: 49%; display: table-cell; padding: 5px">
+      <p style="font-size: 10px; margin-top: 3px; margin-bottom: 3px"   [innerHTML]="company[0].pdf_note3">
+        <!-- Standard Billing Options<br>
+        Email: billing@wellsbrothersnv.com<br>
+        Mail: 4220 S Maryland pkwy, Ste 208A, Las Vegas, NV 89119<br>
+        Phone #: 725-977-9992
+        <br>
+        Quick Pay:
+        Mention on subject Quick Pay and the term
+        Next day %5
+        7 days %3.5
+        15 days %2 -->
+      </p>
+    </div>
+  </div>
+
+
+</div>

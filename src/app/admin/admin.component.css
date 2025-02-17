@@ -1,0 +1,25 @@
+section {
+  background: #f3f5fa;
+}
+
+main{
+  margin-top: 50px;
+  padding-bottom: 50px;
+}
+
+.card {
+  position: relative;
+  box-shadow: 0 6px 12px rgba(140,152,164,.075);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(26,54,126,0.125);
+  border-radius: .25rem;
+}
+
+.btn-shadow {
+  box-shadow: 0 0.125rem 0.625rem rgba(22,170,255,0.4), 0 0.0625rem 0.125rem rgba(22,170,255,0.5);
+}

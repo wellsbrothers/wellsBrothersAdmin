@@ -1,0 +1,13 @@
+.nav-link.active {
+  background: #394857;
+  color: white;
+}
+
+.width-28 {
+  width: 28px;
+}
+
+a {
+  color: #394857;
+}
+

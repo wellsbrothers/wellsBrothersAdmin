@@ -1,0 +1,191 @@
+<section class="row w-100 no-margin">
+  <div class="col-12 no-padding">
+    <div class="row pt-5 pb-5 no-margin">
+      <div class="col-6">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active fs-20" aria-current="page" [routerLink]="['/admin/carriers']">Carriers</li>
+            <li class="breadcrumb-item fs-20" aria-current="page">Edit Carrier</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-6 text-right">
+      </div>
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row no-margin" *ngIf="carrier" id="addCarrierForm">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierfullName" [ngClass]="validateError.companyName ? 'text-danger' : ''">Full Name</label>
+              <input type="text" id="carrierfullName" class="form-control" name="carrierfullName" [(ngModel)]="carrier.companyName">
+              <p class="text-danger" *ngIf="validateError.companyName">Full Name is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierDotNumber" [ngClass]="validateError.dotNumber ? 'text-danger' : ''">Dot Number</label>
+              <input type="text" id="carrierDotNumber" class="form-control" name="carrierDotNumber" [(ngModel)]="carrier.dotNumber">
+              <p class="text-danger" *ngIf="validateError.dotNumber">Dot Number is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="bank_name">Bank Name</label>
+              <input type="text" id="bank_name" class="form-control" name="carrierbank_name" [(ngModel)]="carrier.bank_name">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="routing_number">Routing Number</label>
+              <input type="text" id="routing_number" class="form-control" name="carrierrouting_number" [(ngModel)]="carrier.routing_number">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="account_number">Account Number</label>
+              <input type="text" id="account_number" class="form-control" name="carrieraccount_number" [(ngModel)]="carrier.account_number">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="ach">AcH</label>
+              <input type="text" id="ach" class="form-control" name="carrierach" [(ngModel)]="carrier.ach">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierCompanyMainEmail" [ngClass]="validateError.companyEmail ? 'text-danger' : ''">Company Main Email</label>
+              <input type="text" id="carrierCompanyMainEmail" class="form-control" name="carrierCompanyMainEmail" [(ngModel)]="carrier.companyEmail">
+              <p class="text-danger" *ngIf="validateError.companyEmail">Company Main Email is required and must be valid email</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierMCNo" [ngClass]="validateError.mc ? 'text-danger' : ''">MCNo</label>
+              <input type="text" id="carrierMCNo" class="form-control" name="carrierMCNo" [(ngModel)]="carrier.mc">
+              <p class="text-danger" *ngIf="validateError.mc">MCNo is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierPhone" [ngClass]="validateError.phone ? 'text-danger' : ''">Phone</label>
+              <input type="text" id="carrierPhone" class="form-control" name="carrierPhone" [(ngModel)]="carrier.phone">
+              <p class="text-danger" *ngIf="validateError.phone">Phone is required and must be only numbers</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierFax">Fax</label>
+              <input type="text" id="carrierFax" class="form-control" name="carrierFax" [(ngModel)]="carrier.fax">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierTrack" [ngClass]="validateError.track ? 'text-danger' : ''">Company Track</label>
+              <input type="text" id="carrierTrack" class="form-control" name="carrierTrack" [(ngModel)]="carrier.track">
+              <p class="text-danger" *ngIf="validateError.track">Company Track is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierTrailer" [ngClass]="validateError.trailer ? 'text-danger' : ''">Company Trailer</label>
+              <input type="text" id="carrierTrailer" class="form-control" name="carrierTrailer" [(ngModel)]="carrier.trailer">
+              <p class="text-danger" *ngIf="validateError.trailer">Company Trailer is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierDriver" [ngClass]="validateError.driver ? 'text-danger' : ''">Company Driver</label>
+              <input type="text" id="carrierDriver" class="form-control" name="carrierDriver" [(ngModel)]="carrier.driver">
+              <p class="text-danger" *ngIf="validateError.driver">Company Driver is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrieraddress" [ngClass]="validateError.address.address ? 'text-danger' : ''">Address</label>
+              <input type="text" id="carrieraddress" class="form-control" name="carrieraddress" [(ngModel)]="carrier.address.address">
+              <p class="text-danger" *ngIf="validateError.address.address">Address is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierstate" [ngClass]="validateError.address.state ? 'text-danger' : ''">State</label>
+              <select id="carrierstate" class="form-control" name="carrierstate" [(ngModel)]="carrier.address.state">
+                <option *ngFor="let state of states" value="{{state.abbreviation}}">{{state.name}}</option>
+              </select>
+              <p class="text-danger" *ngIf="validateError.address.state">State is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carriercity" [ngClass]="validateError.address.city ? 'text-danger' : ''">City</label>
+              <input type="text" id="carriercity" class="form-control" name="carriercity" [(ngModel)]="carrier.address.city">
+              <p class="text-danger" *ngIf="validateError.address.city">City is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierzip" [ngClass]="validateError.address.zip ? 'text-danger' : ''">Postal/Zip</label>
+              <input type="text" id="carrierzip" class="form-control" name="carrierzip" [(ngModel)]="carrier.address.zip">
+              <p class="text-danger" *ngIf="validateError.address.zip">Postal/Zip is required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="carrierFactory">Factory</label>
+              <select type="text" id="carrierFactory" class="form-control" name="factory" [(ngModel)]="carrier.factoryId">
+                <option value="">Select Factory</option>
+                <option *ngFor="let factory of factories" value="{{factory._id}}">{{factory.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header">
+                <p>Review</p>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="standard" class="mr-2">
+                    <input type="radio" id="standard" name="review-status" [(ngModel)]="carrier.review.status" value="standard">
+                    Standard
+                  </label>
+                  <label for="good" class="mr-2">
+                    <input type="radio" id="good" name="review-status" [(ngModel)]="carrier.review.status" value="good">
+                    Good
+                  </label>
+                  <label for="bad" class="mr-2">
+                    <input type="radio" id="bad" name="review-status" [(ngModel)]="carrier.review.status" value="bad">
+                    Bad
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label for="message">Message</label>
+                  <textarea class="form-control" name="message" id="message" rows="5" [(ngModel)]="carrier.review.message"></textarea>
+                </div>
+                <div class="form-group" *ngIf="reviewAdmin">
+                  {{reviewAdmin.username}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12  text-right">
+            <button class="btn btn-primary" (click)="updateCarrier()">Save</button>
+          </div>
+        </div>
+        <div class="row no-margin" *ngIf="!carrier">
+          <p class="fs-16">No data</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

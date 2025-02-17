@@ -1,0 +1,506 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-c pt-0 pb-0">
+    <a class="navbar-brand" href="#">
+      <img src="assets/images/logo-white.svg" class="img-responsive" alt="">
+    </a>
+    <button class="navbar-toggler text-light">
+      <svg width="1em" height="1em" (click)="showHeadeDropdown = !showHeadeDropdown" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+      </svg>
+    </button>
+    <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarNavDropdown" [ngClass]="showHeadeDropdown ? 'show' : ''">
+      <ul class="navbar-nav ml-auto" >
+        <li class="nav-item dropdown" [ngClass]="showHeadeDropdown ? 'show' : ''">
+          <a class="nav-link text-light dropdown-toggle d-user" href="javascript:void(0)" (click)="showHeadeDropdown = !showHeadeDropdown">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu" [ngClass]="showHeadeDropdown ? 'show' : ''" id="userDropdown" >
+            <a class="dropdown-item" [routerLinkActive]="['active']"  [routerLink]="['/dashboard']">Dashboard</a>
+            <a class="dropdown-item" [routerLinkActive]="['active']"  [routerLink]="['/admin/my-page']"  *ngIf="role !== 2">My Page</a>
+            <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Log Out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button (click)="showHeadFilter = !showHeadFilter" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown1" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-filter-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM3.5 5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zM5 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    <div class="collapse navbar-collapse" [ngClass]="showHeadFilter ? 'show' : ''" [ngStyle]="{'display' : showHeadFilter ? 'block': 'none'}" id="navbarNavDropdown1">
+      <div class="row w-100 no-margin">
+        <div class="col-12  p-2 card">
+          <div class="row w-100 no-margin">
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="name">Find</label>
+                <input type="number" id="name" class="form-control" name="name" [(ngModel)]="search.text" (keydown.enter)='getLoads()'>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" class="form-control" name="type" [(ngModel)]="search.type" (change)='getLoads()'>
+                  <option label="Load #" value="num" selected="selected">Load #</option>
+                  <option label="Broker Load #" value="broker_load">Broker Load #</option>
+                  <option label="Check #" value="check">Check #</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12" *ngIf="role !== 2">
+              <div class="form-group">
+                <label for="users">Dispatcher</label>
+                <select id="users" class="form-control" name="users"  [(ngModel)]="search.adminId" (change)='getLoads()'>
+                  <option value="" selected>All</option>
+                  <option *ngFor="let admin of admins" value="{{admin._id}}" >{{admin.username}} - {{admin.note}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12">
+              <div class="form-group">
+                <label for="payed">Paid</label>
+                <select id="payed" class="form-control" name="payed"  [(ngModel)]="search.payed" (change)='getLoads()'>
+                  <option value="" selected>All</option>
+                  <option value="1">Paid</option>
+                  <option value="2">Unpaid</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row w-100 no-margin">
+            <div class="col-xl-2 col-lg-2 col-md-6  col-sm-6  col-6">
+              <div class="form-group">
+                <label for="dateFrom">Date From</label>
+                <input type="date" placeholder="mm/dd/yyyy" id="dateFrom" class="form-control" name="dateFrom" [(ngModel)]="search.dateMin" (keydown.enter)='getLoads()'>
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-6  col-sm-6  col-6">
+              <div class="form-group">
+                <label for="dateTo">Date To</label>
+                <input type="date" placeholder="mm/dd/yyyy" id="dateTo" class="form-control" name="dateTo" [(ngModel)]="search.dateMax" (keydown.enter)='getLoads()'>
+              </div>
+            </div>
+            <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+              <div class="form-group pt-20">
+                <button class="btn btn-secondary" (click)="getLoads()">Search</button>
+              </div>
+            </div>
+            <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+              <div class="form-group pt-20">
+                <button class="btn btn-secondary" (click)="page = 1; setSearchFilter(); getLoads()">Reset Filter</button>
+              </div>
+            </div>
+            <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+              <div class="form-group pt-20">
+                <button class="btn btn-secondary" (click)="page = 1; getReport()">Report</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 card">
+          <div class="row w-100 no-margin">
+            <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 p-2">
+              <button  class="btn btn-secondary" (click)="loadModal.show = true">New Active Load</button>
+            </div>
+            <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 p-2">
+              <button  class="btn btn-secondary" (click)="mergeModal = true">Conf Merger</button>
+            </div>
+            <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 p-2">
+              <button  class="btn btn-secondary" (click)="creditCheckModal = true">Credit Check</button>
+            </div>
+            <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 p-2">
+              <button  class="btn btn-secondary" (click)="carrierCheckModal = true">Carrier Check</button>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
+              <div class="row p-3 w-100 no-margin justify-content-end">
+                <span class="p-2" *ngIf="sum"><b>Total:</b> ${{numberWithCommas()}}</span>
+                <span class="p-2" *ngIf="!sum || sum === 0"><b>Total:</b> $0</span>
+                <span class="p-2"><b>Load Count:</b> {{total}}</span>
+                <button class="btn btn-secondary" (click)="expoertExcel()">Export Excel</button>
+                <a class="btn btn-secondary" style="height: 0; opacity: 0" href="{{backUrl}}/xlsx/Excel.xlsx" target="_blank" id="downloadXlsx">Dowload Excel</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section>
+  <div class="container-fluid mt-2">
+    <div class="row bg-white no-margin p-3">
+      <div class="col-12 pb-1">
+        <div class="row">
+          <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 table-responsive">
+        <table class="table table-bordered" *ngIf="loads.length > 0">
+          <thead>
+          <tr class="bg-secondary-light-grey">
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'num'; sort(0)" [ngClass]="searchTD[0] ? 'asc' : 'desc'">Load#</th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'admin.username'; sort(1)" [ngClass]="searchTD[1] ? 'asc' : 'desc'">Dispatcher</th>
+            <!-- <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'branch.name'; sort(2)" [ngClass]="searchTD[2] ? 'asc' : 'desc'">Branch</th> -->
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'broker_load'; sort(3)" [ngClass]="searchTD[3] ? 'asc' : 'desc'">W/O</th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'carrier.companyName'; sort(4)" [ngClass]="searchTD[4] ? 'asc' : 'desc'">Driver/Carrier</th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'sheeper.date'; sort(5)" [ngClass]="searchTD[5] ? 'asc' : 'desc'">Ship Date</th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'consignee.date'; sort(6)" [ngClass]="searchTD[6] ? 'asc' : 'desc'">Del Date</th>
+            <th scope="col" class="th  fs-11"
+                (click)="search.sortBy = 'broker.name'; sort(7)" [ngClass]="searchTD[7] ? 'asc' : 'desc'">Broker</th>
+            <th scope="col" class=" fs-11">Origin</th>
+            <th scope="col" class=" fs-11">Destinaion</th>
+            <th scope="col" class=" fs-11" *ngIf="role === 0">Broker Rate</th>
+            <th scope="col" class=" fs-11" *ngIf="role === 0">Line Haul</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let l of loads; let i = index" >
+            <td scope="row" [ngClass]="l.tonu ? 'tonu-bg' : ''">
+              <span (click)="sharedService.setModalAddOrEdtit({add: false, loadId: l._id}); loadModal.show = true">
+                <b><u class=" fs-11 cursor-pointer">{{l.num}}</u></b>
+              </span>
+            </td>
+            <td class=" fs-11">
+              {{l.admin[0].username}} - {{l.admin[0].note}}
+            </td>
+            <!-- <td class=" fs-11">
+              {{l.branch[0].name}}
+            </td> -->
+            <td class=" fs-11">
+              {{l.broker_load}}
+            </td>
+            <td class=" fs-11">
+              <b class="color-orange fs-11">{{l.carrier[0].companyName}}</b>
+            </td>
+            <td class=" fs-11">
+              <p *ngFor="let sheep of l.sheeper; let j = index"><b>{{j+1}}) </b> {{sheep.date}}</p>
+            </td>
+            <td class=" fs-11">
+              <p *ngFor="let cons of l.consignee; let j = index"><b>{{j+1}}) </b> {{cons.date}}</p>
+            </td>
+            <td class="text-primary fs-11">
+              <b>{{l.broker[0].name}}</b>
+            </td>
+            <td class=" fs-11">
+              <p *ngFor="let sheep of l.sheeper; let j = index" class=" fs-11"><b class=" fs-11">{{j+1}}) </b> {{getSheepName(l, sheep.sheeper_id) ? getSheepName(l, sheep.sheeper_id).name : '-'}} - {{sheep.address}}</p>
+            </td>
+            <td class=" fs-11">
+              <p *ngFor="let cons of l.consignee; let j = index" class=" fs-11"><b class=" fs-11">{{j+1}}) </b> {{getConsName(l, cons.consignee_id) ? getConsName(l, cons.consignee_id).name : '-'}} - {{cons.address}}</p>
+            </td>
+            <td class=" fs-11" *ngIf="role === 0">
+              <!-- l.broker_rate - other charges -l.total_customer_invoice -->
+              <!-- {{l.broker_rate - sumOtherCharg(l.other_charges) - l.total_customer_invoice}} -->
+              {{l.broker_rate}}
+            </td>
+            <td class=" fs-11" *ngIf="role === 0">
+              <!-- {{l.carrier_fee - l.carrier_gross_pay}} -->
+              {{sumLineHaul(l.line_houles)}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div class="col-xl-10 col-lg-10 col-md-9 col-xs-9 col-9">
+            <div class="row no-margin justify-content-end"  *ngIf="total > limit">
+              <app-pagination
+                [count]="total"
+                [page]="page"
+                [perPage]="limit"
+                [pagesToShow]="5"
+                (goPrev)="prev()"
+                (goNext)="next()"
+                (goPage)="currentpage($event)">
+              </app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-load-modal [loadModal]="loadModal"></app-load-modal>
+
+<!--mergemodal-->
+<div class="modal fade" id="mergemodal" [ngClass]="mergeModal ? 'show' : ''" [ngStyle]="{'display' : mergeModal ? 'block': 'none'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mergemodalLabel">Merge</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"  (click)="mergeModal = false; setergedLoads()">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="loaders">
+        <div class="row p-3 loader" *ngFor="let mergedLoad of mergedLoads; let i = index">
+          <div class="col-8">
+            <div class="form-group">
+              <label [ngClass]="mergedValidateError[i] ? 'text-danger' : ''">Load#{{i+1}}</label>
+              <input type="number" class="form-control" name="loade{{i+1}}" [(ngModel)]="mergedLoad.loadNumber">
+              <p class="text-danger" *ngIf="mergedValidateError[i]">Number is required</p>
+            </div>
+          </div>
+          <div class="col-2 pt-20">
+            <button class="btn btn-success add_loader" (click)="addMergedLoad()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="col-2 pt-20" *ngIf="mergedLoads.length > 2">
+            <button class="btn btn-danger remove_loader" id="remove_loader_1"  (click)="removeMergedLoad(i)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="mergeModal = false; setergedLoads()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="pdfMergeLoad()">Save</button>
+        <a href="{{backUrl}}/pdf/{{(load && load.num) ? load.num : ''}}rate.pdf" id="downloadRatePdf1" style="height: 0" target="_blank"></a>
+      </div>
+      <div id="pdfTable1" style="display: none">
+        <app-rate-confirmation  [load]="load">
+        </app-rate-confirmation>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--creditCheckModal-->
+<div class="modal fade" [ngClass]="creditCheckModal ? 'show' : ''" [ngStyle]="{'display' : creditCheckModal ? 'block': 'none'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Broker/Customer Details</h5>
+        <button type="button" class="close" (click)="creditCheckModal = false; broker = null">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body min-vh-100">
+        <div class="row no-margin">
+          <div class="col-12 text-right">
+            <label for="byName">
+              <input type="radio" id="byName" value="searchWord" [(ngModel)]="searchBroker.type">
+              By Name
+            </label>
+            <label for="byMc" class="ml-2">
+              <input type="radio" id="byMc" value="mc" [(ngModel)]="searchBroker.type">
+              By MC
+            </label>
+            <label class="ml-2">
+              <input type="search" class="form-control" id="search" [(ngModel)]="searchBroker.text">
+            </label>
+            <button class="btn btn-secondary ml-2" (click)="searchBrokersStatus()">SEARCH</button>
+          </div>
+        </div>
+        <div class="row mt-2 no-margin">
+          <div class="col-12" *ngIf="!broker">
+            <p class="mb-3 fs-16">Result not found</p>
+            <div class="row no-margin text-center">
+              <img src="assets/Searchicon.png" width="200px" class="m-auto" alt="">
+            </div>
+          </div>
+          <div class="col-12" *ngIf="broker">
+            <p class="mb-3 fs-16">{{broker.name}}</p>
+            <div class="row no-margin text-center">
+              <img *ngIf="broker.status" src="assets/check.png" width="200px" class="m-auto" alt="">
+              <img *ngIf="!broker.status" src="assets/unchecked.png" width="200px" class="m-auto" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="creditCheckModal = false; broker = null">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--carrierCheckModal-->
+<div class="modal fade" [ngClass]="carrierCheckModal ? 'show' : ''" [ngStyle]="{'display' : carrierCheckModal ? 'block': 'none'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Carrier Check</h5>
+        <button type="button" class="close" (click)="carrierCheckModal = false; carrierWithStatus = null">
+          <span aria-hidden="true"  >&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body min-vh-100">
+          <div class="row no-margin">
+            <div class="col-12 text-right">
+              <label for="byName1">
+                <input type="radio" name="carSearchType" id="byName1" value="searchWord" [(ngModel)]="searchCarrier.type">
+                By Name
+              </label>
+              <label for="byMc1" class="ml-2">
+                <input type="radio" id="byMc1" value="mc" [(ngModel)]="searchCarrier.type">
+                By MC
+              </label>
+              <label class="ml-2">
+                <input type="search" name="carSearchType" class="form-control" [(ngModel)]="searchCarrier.text">
+              </label>
+              <button class="btn btn-secondary ml-2" (click)="searchCarrierStatus()">SEARCH</button>
+            </div>
+          </div>
+          <div class="row mt-2 no-margin">
+            <div class="col-12" *ngIf="!carrierWithStatus">
+              <p class="mb-3 fs-16">Result not found</p>
+              <div class="row no-margin text-center">
+                <img src="assets/Searchicon.png" width="200px" class="m-auto" alt="">
+              </div>
+            </div>
+            <div class="col-12" *ngIf="carrierWithStatus">
+              <p class="mb-3 fs-20 text-center"><b class="fs-20">{{carrierWithStatus.companyName}}</b></p>
+              <p class="mb-3 fs-16 text-center">State: {{carrierWithStatus.address.state}}</p>
+              <div class="row no-margin text-center" *ngIf="carrierWithStatus.review">
+                <div class="col-12 col-xs-12 col-md-4 col-lg-4 col-xl-4">
+                  <label title="standard" for="carrierRevStatus1" class="smyle-pad rounded-circle smyles"  [ngClass]="carrierWithStatus.review.status === 'standard' ? 'b-3_with-shadow border-primary' : ''">
+                    <img src="assets/standard.png" alt=""class="m-auto w-100" >
+                    <input
+                      *ngIf="carrierWithStatus.review && (!carrierWithStatus.review.createdBy || adminId == carrierWithStatus.review.createdBy)"
+                      type="radio" name="smyle" checked id="carrierRevStatus1" class="d-none" value="standard" [(ngModel)]="carrierWithStatus.review.status">
+                  </label>
+                </div>
+                <div class="col-12 col-xs-12 col-md-4 col-lg-4 col-xl-4">
+                  <label title="good" for="carrierRevStatus2" class="smyle-pad rounded-circle smyles" [ngClass]="carrierWithStatus.review.status === 'good' ? 'b-3_with-shadow border-primary' : ''">
+                    <img src="assets/good.png" alt=""class="m-auto w-100" >
+                    <input
+                      *ngIf="carrierWithStatus.review && (!carrierWithStatus.review.createdBy || adminId == carrierWithStatus.review.createdBy)"
+                      type="radio" name="smyle" id="carrierRevStatus2" class="d-none" value="good" [(ngModel)]="carrierWithStatus.review.status">
+                  </label>
+                </div>
+                <div class="col-12 col-xs-12 col-md-4 col-lg-4 col-xl-4">
+                  <label title="bad" for="carrierRevStatus3" class="smyle-pad rounded-circle smyles" [ngClass]="carrierWithStatus.review.status === 'bad' ? 'b-3_with-shadow border-primary' : ''">
+                    <img src="assets/bad.png" alt="" class="m-auto w-100" >
+                    <input
+                      *ngIf="carrierWithStatus.review && (!carrierWithStatus.review.createdBy || adminId == carrierWithStatus.review.createdBy)"
+                      type="radio" name="smyle" id="carrierRevStatus3" class="d-none" value="bad" [(ngModel)]="carrierWithStatus.review.status">
+                  </label>
+                </div>
+                <div class="col-12">
+                  <div class="row no-margin"
+                       *ngIf="carrierWithStatus.review && carrierWithStatus.review.createdBy && adminId !== carrierWithStatus.review.createdBy">
+                    <p>{{carrierWithStatus.review.message}}</p>
+                  </div>
+                  <div class="row no-margin"
+                       *ngIf="carrierWithStatus.review && (!carrierWithStatus.review.createdBy || adminId == carrierWithStatus.review.createdBy)">
+                    <div class="col-12">
+                      <label for="revMessage">Message</label>
+                      <textarea class="form-control" rows="3" id="revMessage" [(ngModel)]="carrierWithStatus.review.message"></textarea>
+                    </div>
+                    <div class="col-12 text-right mt-3">
+                      <button class="btn btn-primary" (click)="updatecarrierReview(); carrierCheckModal = false; carrierWithStatus = null">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="carrierCheckModal = false; carrierWithStatus = null">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--reports modal-->
+<div class="modal fade" [ngClass]="repoertModal ? 'show' : ''" [ngStyle]="{'display' : repoertModal ? 'block': 'none'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Report</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"  (click)="repoertModal = false">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row no-margin">
+          <div class="col-12 " id="reportPdf" *ngIf="reportLoads" style="text-align: center; border: solid 1px black; padding: 10px">
+            <p style="font-size: 10px; text-align: center">
+              <b>{{search.dateMin | date :'MM/dd/yyy'}} - {{search.dateMax | date :'MM/dd/yyy'}}</b>
+            </p>
+            <table class="table table-bordered"  style="width: 100%; margin: 0 auto">
+              <thead>
+                <tr style="background: #3a3a3a; color: white">
+                  <th style="font-size: 8px; padding: 5px">LOAD#</th>
+                  <th style="font-size: 8px; padding: 5px">AGENT</th>
+                  <th style="font-size: 8px; padding: 5px">DATE</th>
+                  <th style="font-size: 8px; padding: 5px">CARRIER</th>
+                  <th style="font-size: 8px; padding: 5px">LINE HAULS</th>
+                  <th style="font-size: 8px; padding: 5px">DRIVERS</th>
+                  <th style="font-size: 8px; padding: 5px">GROSS PROFIT</th>
+                  <th style="font-size: 8px; padding: 5px">AGENT COM.</th>
+                  <th style="font-size: 8px; padding: 5px">AGENT %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let lo of reportLoads; let i = index" style="{{i % 2 === 0 ? 'background: #eee' : ''}}">
+                  <td style="font-size: 8px; padding: 5px">{{lo.num}}</td>
+                  <td style="font-size: 8px; padding: 5px" *ngIf="lo.admin">{{lo.admin[0].username}} ({{lo.admin[0].note}})</td>
+                  <td style="font-size: 8px; padding: 5px">{{lo.createdAt | date: 'MM-dd-yyyy'}}</td>
+                  <td style="font-size: 8px; padding: 5px" *ngIf="lo.carrier">{{lo.carrier[0].companyName}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{lo.broker_rate.toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{getLineHoulesSum(lo.line_houles).toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{(lo.broker_rate - getLineHoulesSum(lo.line_houles)).toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{(((lo.broker_rate - getLineHoulesSum(lo.line_houles))*lo.admin[0].percentage)/100).toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px" *ngIf="lo.admin">{{lo.admin[0].percentage}}%</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="font-size: 8px; padding: 5px">TOTAL:</td>
+                  <td style="font-size: 8px; padding: 5px">${{reportSumBrokerRate.toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{reportSumCarrierFee.toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{reportSumDifBrokerRateCarrierFee.toLocaleString()}}</td>
+                  <td style="font-size: 8px; padding: 5px">${{reportSumDifBrokerRateCarrierFeePercentage.toLocaleString()}}</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <p *ngIf="!reportLoads || reportLoads.length === 0">No reports data</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="repoertModal = false">Close</button>
+        <button type="button" class="btn btn-success" (click)="reportPdfFunc()">PDF</button>
+        <a class="btn btn-secondary" style="height: 0; opacity: 0" href="{{backUrl}}/pdf/reportPdf.pdf" target="_blank" id="downloadReportPdf">Dowload</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade "
+     [ngClass]="(loadModal.show || mergeModal || repoertModal) ? 'show' : ''"
+     [ngStyle]="{'display' : (loadModal.show || mergeModal || repoertModal) ? 'block': 'none'}"></div>

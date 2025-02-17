@@ -1,0 +1,23 @@
+input[type="radio"] {
+  opacity: 0;
+}
+input[type="radio"]:checked+label.btn-outline-secondary{
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+input[type="radio"]:checked+label.btn-outline-primary{
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+input[type="radio"]:checked+label.btn-outline-danger{
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+input[type="radio"]:checked+label.btn-outline-success{
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}

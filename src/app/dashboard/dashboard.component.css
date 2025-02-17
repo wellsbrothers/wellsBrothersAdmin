@@ -1,0 +1,31 @@
+.color-orange{
+  color: #ffa100;
+}
+
+.bg-secondary-light-grey {
+  background-color: #e1e1e1 !important;
+  background: #e1e1e1 !important;
+}
+
+.fs-11 {
+  font-size: 11px!important;
+}
+
+.smyles {
+  width: 160px;
+  height: 140px;
+}
+
+.smyle-pad {
+  padding: 30px;
+  cursor: pointer;
+}
+
+.b-3_with-shadow {
+  border: 3px solid #eee;
+  box-shadow: 0 0 5px grey;
+}
+
+.tonu-bg {
+  background: #ff00009e;
+}

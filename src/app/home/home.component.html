@@ -1,0 +1,10 @@
+<div class="row h-100">
+  <div class="col-sm-12 my-auto text-center">
+    <div class="d-inline-block mr-2 card card-block w-25 p-5">
+      <h4 class="align-self-center"><a [routerLink]="['/dashboard']"><b>TMS</b></a></h4>
+    </div>
+    <div class="d-inline-block mr-2 card card-block w-25 p-5" *ngIf="role !== 2">
+      <h4 class="align-self-center"><a [routerLink]="['/ap']"><b>AP</b></a></h4>
+    </div>
+  </div>
+</div>

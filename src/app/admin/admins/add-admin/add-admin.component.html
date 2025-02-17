@@ -1,0 +1,74 @@
+<section class="row w-100 no-margin">
+  <div class="col-12 no-padding">
+    <div class="row pt-5 pb-5 no-margin">
+      <div class="col-6">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active fs-20" aria-current="page" [routerLink]="['/admin/admins']">Dispatchers</li>
+            <li class="breadcrumb-item fs-20" aria-current="page">Add Dispatcher</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row no-margin">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" class="form-control" [(ngModel)]="admin.fullName">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="userName">Username</label>
+              <input type="text" id="userName" name="userName" class="form-control" [(ngModel)]="admin.username">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="role">Role</label>
+              <select id="role" name="role" class="form-control" [(ngModel)]="admin.role">
+                <option value="0" *ngIf="role === 0">Admin</option>
+                <option value="1">Manager</option>
+                <option value="2">Agent</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="phone2">Phone</label>
+              <input type="text" id="phone2" name="phone" class="form-control" [(ngModel)]="admin.phone">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="percentage">Percentage</label>
+              <input type="number" id="percentage" name="percentage" class="form-control" [(ngModel)]="admin.percentage">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="note">Note</label>
+              <input type="text" id="note" name="note" class="form-control" [(ngModel)]="admin.note">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" class="form-control" [(ngModel)]="admin.password">
+            </div>
+          </div>
+          <div class="col-12 text-right">
+            <button class="btn btn-primary" (click)="createAdmin()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

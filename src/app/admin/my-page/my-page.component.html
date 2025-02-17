@@ -1,0 +1,116 @@
+<section class="row w-100 no-margin">
+  <div class="col-12 no-padding">
+    <div class="row pt-5 pb-5 no-margin">
+      <div class="col-6">
+        <h1 class="h2">My Account</h1>
+      </div>
+      <div class="col-6 text-right">
+        <button class="btn btn-primary mr-1 btn-shadow " (click)="backup()">Backup</button>
+        <button class="btn btn-primary mr-1 btn-shadow " *ngIf="editInfo || editPass" (click)="editInfo = false; editPass = false">My Info</button>
+        <button class="btn btn-primary mr-1 btn-shadow " *ngIf="!editInfo  && !editPass" (click)="editInfo = true; editPass = false">Edit Info</button>
+        <button class="btn btn-primary btn-shadow " (click)="editInfo = false; editPass = true">Change Password</button>
+      </div>
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf="!editInfo && !editPass">
+    <div class="card" *ngIf="admin" style="box-shadow: 0 6px 12px rgba(140,152,164,.075)">
+      <div class="card-header">
+        <p class="no-margin"><b class="fs-20">Name: {{admin.fullName}}</b></p>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <b class="fs-16">Role: </b> <span class="fs-16">{{admin.role === 0 ? 'Admin' : (admin.role === 1 ? 'Manager' : 'Agent')}}</span>
+          </li>
+          <li class="list-group-item">
+            <b class="fs-16">UserName: </b> <span class="fs-16">{{admin.username}}</span>
+          </li>
+          <li class="list-group-item">
+            <b class="fs-16">Phone: </b> <span class="fs-16">{{admin.phone}}</span>
+          </li>
+          <li class="list-group-item">
+            <b class="fs-16">Note: </b> <span class="fs-16">{{admin.note ? admin.note : '-'}}</span>
+          </li>
+          <li class="list-group-item">
+            <b class="fs-16">Percentage: </b> <span class="fs-16">{{admin.percentage ? admin.percentage : '-'}}</span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="col-12" *ngIf="editInfo && !editPass">
+    <div class="card">
+      <div class="card-header">
+        <p class="no-margin"><b class="fs-20">Edit Info</b></p>
+      </div>
+      <div class="card-body">
+        <div class="row no-margin">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="name" [ngClass]="validateError.fullName ? 'text-danger' : ''">Name</label>
+              <input type="text" id="name" name="name" class="form-control" [(ngModel)]="admin.fullName">
+              <p class="text-danger d-none" [ngClass]="validateError.fullName ? 'd-block' : ''">Required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="userName"  [ngClass]="validateError.username ? 'text-danger' : ''">Username</label>
+              <input type="text" id="userName" name="userName" class="form-control" [(ngModel)]="admin.username">
+              <p class="text-danger d-none" [ngClass]="validateError.username ? 'd-block' : ''">Required</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="phone9" [ngClass]="validateError.phone ? 'text-danger' : ''">Phone</label>
+              <input type="text" id="phone9" name="phone" class="form-control" [(ngModel)]="admin.phone">
+              <p class="text-danger d-none" [ngClass]="validateError.phone ? 'd-block' : ''">Required, phone number must be only numbers</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="note">Note</label>
+              <input type="text" id="note" name="note" class="form-control" [(ngModel)]="admin.note">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="percentage" [ngClass]="validateError.percentage ? 'text-danger' : ''">Percentage</label>
+              <input type="number" id="percentage" name="percentage" class="form-control" [(ngModel)]="admin.percentage">
+              <p class="text-danger d-none" [ngClass]="validateError.percentage ? 'd-block' : ''">Required, percentage must be only number</p>
+            </div>
+          </div>
+          <div class="col-12 text-right">
+            <button class="btn btn-primary" (click)="update()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf="!editInfo && editPass">
+    <div class="card">
+      <div class="card-header">
+        <p class="no-margin"><b class="fs-20">Change Password</b></p>
+      </div>
+      <div class="card-body">
+        <div class="row no-margin">
+          <div class="col-4"></div>
+          <div class="col-4">
+            <div class="form-group">
+              <label for="password">New Password</label>
+              <input type="password" id="password" name="password" class="form-control" [(ngModel)]="newPassword">
+            </div>
+            <div class="form-group text-center">
+              <button class="btn btn-primary" (click)="updatePassword()">Save</button>
+            </div>
+          </div>
+          <div class="col-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

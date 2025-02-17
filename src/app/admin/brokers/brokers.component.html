@@ -1,0 +1,129 @@
+<section class="row w-100 no-margin">
+  <div class="col-12 no-padding">
+    <div class="row pt-5 pb-5 no-margin">
+      <div class="col-6">
+        <h1 class="h2">Brokers</h1>
+      </div>
+      <div class="col-6 text-right">
+        <button class="btn btn-primary" [routerLink]="['./add-broker']">Add Broker</button>
+      </div>
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="row no-margin p-3">
+        <div class="col-4">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" id="name" [(ngModel)]="search.name" (keyup)="page = 1; getBrokers()">
+          </div>
+        </div>
+        <div  class="col-4">
+          <div class="form-group">
+            <label for="phone10">Phone</label>
+            <input type="text" class="form-control" name="phone" id="phone10" [(ngModel)]="search.phone" (keyup)="page = 1; getBrokers()">
+          </div>
+        </div>
+        <div  class="col-4">
+          <div class="form-group">
+            <label for="mc">MCNo</label>
+            <input type="text" class="form-control" name="mc" id="mc" [(ngModel)]="search.mc" (keyup)="page = 1; getBrokers()">
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="card">
+      <div class="card-body">
+        <div class="row w-100 no-margin">
+          <div class="col-12">
+            <div class="row p-2">
+              <div class="col-2">
+                <select name="" class="form-control"  (change)=" this.page = 1; getBrokers()"  [(ngModel)]="limit">
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 table-responsive">
+            <table class="table" *ngIf="brokers">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th class="th"
+                    (click)="search.sortBy = 'name'; sort(0)" [ngClass]="searchTD[0] ? 'asc' : 'desc'"
+                    scope="col">Name</th>
+                <th class="th"
+                    (click)="search.sortBy = 'mc'; sort(1)" [ngClass]="searchTD[1] ? 'asc' : 'desc'"
+                    scope="col">MC</th>
+                <th class="th"
+                    (click)="search.sortBy = 'phones.phoneNumber'; sort(2)" [ngClass]="searchTD[2] ? 'asc' : 'desc'"
+                    scope="col">Phone</th>
+                <th class="th"
+                    (click)="search.sortBy = 'status'; sort(3)" [ngClass]="searchTD[3] ? 'asc' : 'desc'"
+                    scope="col">Status</th>
+                <th scope="col">Edit</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let broker of brokers; let i = index">
+                <th scope="row">{{page * i + 1}}</th>
+                <td>{{broker.name}}</td>
+                <td>{{broker.mc}}</td>
+                <td>
+                  <p *ngFor="let p of broker.phones; let i = index">
+                    {{p.phoneNumber}}
+                  </p>
+                </td>
+                <td>
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="customSwitch{{page*i}}" [(ngModel)]="broker.status" (ngModelChange)="changeStatus(broker)">
+                    <label class="custom-control-label" for="customSwitch{{page*i}}" ></label>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-primary" [routerLink]="['./edit-broker', broker._id]">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-2">
+                <select name="" class="form-control"  (change)="this.page = 1; getBrokers()" [(ngModel)]="limit">
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div class="col-10">
+                <div class="row no-margin justify-content-end"  *ngIf="total > limit">
+                  <app-pagination
+                    [count]="total"
+                    [page]="page"
+                    [perPage]="limit"
+                    [pagesToShow]="5"
+                    (goPrev)="prev()"
+                    (goNext)="next()"
+                    (goPage)="currentpage($event)">
+                  </app-pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
