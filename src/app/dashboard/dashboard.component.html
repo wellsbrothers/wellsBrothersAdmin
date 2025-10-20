@@ -91,7 +91,7 @@
             </div>
             <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
               <div class="form-group pt-20">
-                <button class="btn btn-secondary" (click)="page = 1; setSearchFilter(); getLoads()">Reset Filter</button>
+                <button class="btn btn-secondary" (click)="page = 1; setSearchFilter(); getLoads(true)">Reset Filter</button>
               </div>
             </div>
             <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
@@ -137,7 +137,7 @@
       <div class="col-12 pb-1">
         <div class="row">
           <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
-            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads(true)">
               <option value="20">20</option>
               <option value="30">30</option>
               <option value="50">50</option>
@@ -222,7 +222,7 @@
       <div class="col-12">
         <div class="row">
           <div class="col-xl-2 col-lg-2 col-md-3 col-xs-3 col-3">
-            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads()">
+            <select name="" class="form-control" [(ngModel)]="limit" (change)="page = 1; getLoads(true)">
               <option value="20">20</option>
               <option value="30">30</option>
               <option value="50">50</option>
@@ -464,7 +464,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let lo of reportLoads; let i = index" style="{{i % 2 === 0 ? 'background: #eee' : ''}}">
+                <tr *ngFor="let lo of reportLoads; let i = index" 
+               >
+                <!-- style="{{i % 2 === 0 ? 'background: #eee' : ''}}" -->
                   <td style="font-size: 8px; padding: 5px">{{lo.num}}</td>
                   <td style="font-size: 8px; padding: 5px" *ngIf="lo.admin">{{lo.admin[0].username}} ({{lo.admin[0].note}})</td>
                   <td style="font-size: 8px; padding: 5px">{{lo.createdAt | date: 'MM-dd-yyyy'}}</td>

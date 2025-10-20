@@ -265,6 +265,14 @@ app-notification {
   width: 550px;
 }
 
+.m-i-m-content-large {
+  margin: 0;
+  background: #3a3a3a;
+  position: absolute;
+  top: 5%;
+  width: 100%;
+}
+
 
 
 .m-fd-m {

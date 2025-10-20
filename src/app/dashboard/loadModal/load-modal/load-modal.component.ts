@@ -1,15 +1,16 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {SharedService} from '../../../shared/shared.service';
-import {LoadsService} from '../../loads.service';
-import {BrokersService} from '../../../admin/brokers/brokers.service';
-import {ConsigneesService} from '../../../admin/consignees/consignees.service';
-import {SheepersService} from '../../../admin/sheepers/sheepers.service';
-import {CarriersService} from '../../../admin/carriers/carriers.service';
-import {AdminsService} from '../../../admin/admins/admins.service';
-import {BranchesService} from '../../../admin/branches/branches.service';
-import {Router} from '@angular/router';
-import {environment} from '../../../../environments/environment';
-import {ValidationsService} from '../../../validations/validations.service';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { AdminsService } from '../../../admin/admins/admins.service';
+import { BranchesService } from '../../../admin/branches/branches.service';
+import { BrokersService } from '../../../admin/brokers/brokers.service';
+import { CarriersService } from '../../../admin/carriers/carriers.service';
+import { ConsigneesService } from '../../../admin/consignees/consignees.service';
+import { SheepersService } from '../../../admin/sheepers/sheepers.service';
+import { SharedService } from '../../../shared/shared.service';
+import { ValidationsService } from '../../../validations/validations.service';
+import { LoadsService } from '../../loads.service';
 
 @Component({
   selector: 'app-load-modal',
@@ -24,7 +25,7 @@ export class LoadModalComponent implements OnInit {
   @ViewChild('pdfTableBOL') pdfTableBOL: ElementRef;
   @ViewChild('pdfTableInvoice') pdfTableInvoice: ElementRef;
 
-  loadId: string;
+  loadId: string = '';
   role: number;
   percentage: number;
   states: any;
@@ -35,7 +36,7 @@ export class LoadModalComponent implements OnInit {
   addCarrier: boolean;
   errorMessageCreate: boolean;
 
-  load: any;
+  load: any = {};
   validationLoad: any;
   brokers: any;
   sheepers: any;
@@ -47,7 +48,7 @@ export class LoadModalComponent implements OnInit {
   branches: any;
 
   addBrokerModal: boolean;
-  otherChargeSum: number;
+  otherChargeSum: number
 
   searchBroker: any;
   searchCarrier: any;
@@ -56,19 +57,74 @@ export class LoadModalComponent implements OnInit {
   broker: any;
   carrier: any;
 
-  deleteLoadText: string;
+  deleteLoadText: string = '';
   fileCount: any;
-  deleteLoadFileId: string;
-  backUrl: string;
+  deleteLoadFileId: string = '';
+  backUrl: string = '';
 
   sheepersTab: any;
   consigneesTab: any;
-  showFiles: boolean;
-  showDeleteFileText: boolean;
-  showFileUpload: boolean;
-  deleteLoadModal: boolean;
+  showFiles: boolean = false;
+  showDeleteFileText: boolean = false;
+  showFileUpload: boolean = false;
+  deleteLoadModal: boolean = false;
 
   loadMoalAddOrEdtit: boolean;
+
+  mailingModalShow: boolean = false;
+
+  invoiceTerm: string | number = '30';
+  customDays: number | null = null;
+
+  invoicePDF: string | null = '';
+  ratePDF: string | null = '';
+  bolPDF: string | null = '';
+
+  private _defaultMailText: string = '';
+
+  get defaultMailText(): string | undefined {
+    // Always regenerate based on current values
+    if (this.invoiceTerm == '15' || this.invoiceTerm == '30' || this.invoiceTerm == '45') {
+      return this._defaultMailText ||
+        `Hello
+Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
+PO # ${this.load?.broker_load ?? ''}
+We would like a ${this.invoiceTerm ?? ''} day ACH payment.
+
+Thank you`;
+    }
+
+    if (this.invoiceTerm == 'Due Upon Receipt') {
+      return this._defaultMailText ||
+        `Hello
+Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
+PO # ${this.load?.broker_load ?? ''}
+We would like the payment to be made via ACH, due upon receipt.
+
+Thank you`;
+    }
+
+    if (this.invoiceTerm == 'custom') {
+      return this._defaultMailText ||
+        `Hello
+Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
+PO # ${this.load?.broker_load ?? ''}
+We would like a ${this.customDays ?? ''} day ACH payment.
+
+Thank you`;
+    }
+
+  }
+
+  set defaultMailText(value: string) {
+    // When user edits the textarea, keep their custom text
+    this._defaultMailText = value;
+  }
+
+
+  mailTo: string = ''
+  ccEmails: { email: string }[] = []; // array of objects
+
 
   constructor(
     private sharedService: SharedService,
@@ -84,12 +140,11 @@ export class LoadModalComponent implements OnInit {
   ) {
     sharedService.role$.subscribe((val: number) => {
       this.role = val;
-      console.log('modal', this.role, typeof this.role);
     });
     sharedService.addBrokerModal$.subscribe((res: boolean) => {
       this.addBrokerModal = res;
     });
-    sharedService.percentage$.subscribe((val: number) => {
+    sharedService.percentage$.subscribe((val: number | any) => {
       this.percentage = val;
     });
     sharedService.loadMoalAddOrEdtit$.subscribe((val: any) => {
@@ -136,6 +191,126 @@ export class LoadModalComponent implements OnInit {
     this.getBranches();
     this.getAdmins();
     this.setValidation();
+
+    this.onClickOutside(document.getElementById("fileUploadModal"), () => {
+      this.showFileUpload = false
+    });
+
+    this.onClickOutside(document.getElementById("fileUploadViewModal"), () => {
+      this.showFiles = false
+    });
+  }
+
+  onClickOutside = (element, callback) => {
+    document.addEventListener('click', e => {
+      if (!element?.contains(e.target)) callback();
+    });
+  };
+
+  onSendMail(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    this.sharedService.setLoader(true);
+
+    this.loadsService.sendMail({
+      load_id: +this.load.num,
+      message: this.defaultMailText,
+      email: this.mailTo,
+      cc_email: this.ccEmails
+        .map(cc => cc.email)        // extract the email strings
+        .filter(email => email),    // remove empty entries // remove empty
+    }).subscribe((res: any) => {
+      if (!res.error) {
+        console.log(res.error);
+      }
+      this.sharedService.setLoader(false);
+      this.mailingModalShow = false;
+      this.mailTo = '';
+    })
+
+  }
+
+  addCC() {
+    this.ccEmails.push({ email: '' }); // push an object
+  }
+
+  removeCC(index: number) {
+    this.ccEmails.splice(index, 1);
+  }
+
+
+  onOpenMailingModal() {
+    this.mailingModalShow = true;
+    this.sharedService.setLoader(true);
+
+    // just update load once
+    // this.getLoad(this.loadId);
+
+    forkJoin([
+      this.loadsService.getRatePdfNew({
+        html: document.getElementById('pdfTableNew')?.innerHTML,
+        loadNum: this.load.num,
+      }),
+      this.loadsService.getBol({
+        html: document.getElementById('pdfTableBOL')?.innerHTML,
+        loadNum: this.load.num,
+      }),
+      this.loadsService.getInvoicePdf({
+        html: document.getElementById('pdfTableInvoice')?.innerHTML,
+        loadNum: this.load.num,
+      }),
+    ]).subscribe(
+      () => {
+        this.ratePDF = `${this.backUrl}/pdf/${this.load.num}_rate_new.pdf`;
+        this.bolPDF = `${this.backUrl}/pdf/${this.load.num}_bol.pdf`;
+        this.invoicePDF = `${this.backUrl}/pdf/${this.load.num}_invoice.pdf`;
+
+        this.sharedService.setLoader(false);
+      },
+      (err) => {
+        console.error('PDF generation error:', err);
+        this.sharedService.setLoader(false);
+      }
+    );
+  }
+
+  onInvoiceTermChange() {
+    if (!this.load.invoice.date) {
+      this.load.invoice.date = new Date();
+    }
+    if (this.invoiceTerm === '15' || this.invoiceTerm === '30' || this.invoiceTerm === '45') {
+      const today = new Date(this.load.invoice.date);
+      today.setDate(today.getDate() + Number(this.invoiceTerm));
+
+
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const year = today.getFullYear();
+
+      this.load.invoice.dueDate = `${month}-${day}-${year}`
+
+    } else if (this.invoiceTerm === 'custom') {
+      this.customDays = null;
+    } else if (this.invoiceTerm === 'Due Upon Receipt') {
+      this.customDays = null;
+      this.load.invoice.dueDate = this.invoiceTerm;
+    }
+  }
+
+  onCustomDaysChange() {
+    if (this.customDays && this.customDays > 0) {
+      const today = new Date(this.load.invoice.date);
+      today.setDate(today.getDate() + this.customDays);
+
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const year = today.getFullYear();
+
+      this.load.invoice.dueDate = `${month}-${day}-${year}`
+    }
   }
 
   setNewLoad(): void {
@@ -150,7 +325,7 @@ export class LoadModalComponent implements OnInit {
       check: '',
       size: 0,
       weight: 0,
-      admin_id: JSON.parse(localStorage.getItem('admin'))._id,
+      admin_id: JSON.parse(localStorage.getItem('admin') as any)._id,
       branch_id: '',
       broker_load: '',
       broker_rate: '',
@@ -170,6 +345,7 @@ export class LoadModalComponent implements OnInit {
       ],
       invoice: {
         date: '',
+        dueDate: '',
         bool: false,
       },
       total_customer_invoice: 0,
@@ -360,7 +536,10 @@ export class LoadModalComponent implements OnInit {
 
     this.loadsService.getOne(id).subscribe((res: any) => {
       if (!res.error) {
+        // let date = this.load.invoice.date;
         this.load = res.data;
+        // this.load.invoice.date = date
+
         this.load.sheeper.forEach((el, ind) => {
           this.sheepersTab[ind] = ind === 0;
           this.validationLoad.sheeper[ind] = {
@@ -626,13 +805,13 @@ export class LoadModalComponent implements OnInit {
 
   upload(loadId): void {
     const files = this.fileCount;
-    const allUploadedFiles = [];
+    const allUploadedFiles: any = [];
     const inputEl: HTMLInputElement =
       this.el.nativeElement.querySelector('#file');
 
     for (let i = 0; i < files.length; i++) {
       const formData: any = new FormData();
-      formData.append('file', inputEl.files.item(i));
+      formData.append('file', inputEl.files?.item(i));
       this.loadsService.upload(loadId, formData).subscribe((res: any) => {
         if (!res.error) {
           allUploadedFiles.push({ error: false, message: '' });
@@ -656,18 +835,22 @@ export class LoadModalComponent implements OnInit {
     console.log('file', this.fileCount, typeof this.fileCount);
   }
 
+  onDateChange(newValue: any) {
+    this.onInvoiceTermChange();
+  }
+
   openPDF(): void {
     this.sharedService.setLoader(true);
     this.getLoad(this.loadId);
     this.loadsService
       .getRatePdf({
-        html: document.getElementById('pdfTable').innerHTML,
+        html: document.getElementById('pdfTable')?.innerHTML,
         loadNum: this.load.num,
       })
       .subscribe((res) => {
         if (!res.error) {
           const doc = document.getElementById('downloadRatePdf');
-          doc.click();
+          doc?.click();
         }
         this.sharedService.setLoader(false);
       });
@@ -678,13 +861,13 @@ export class LoadModalComponent implements OnInit {
     this.getLoad(this.loadId);
     this.loadsService
       .getRatePdfNew({
-        html: document.getElementById('pdfTableNew').innerHTML,
+        html: document.getElementById('pdfTableNew')?.innerHTML,
         loadNum: this.load.num,
       })
       .subscribe((res) => {
         if (!res.error) {
           const doc = document.getElementById('downloadRatePdfNew');
-          doc.click();
+          doc?.click();
         }
         this.sharedService.setLoader(false);
       });
@@ -695,13 +878,13 @@ export class LoadModalComponent implements OnInit {
     this.getLoad(this.loadId);
     this.loadsService
       .getBol({
-        html: document.getElementById('pdfTableBOL').innerHTML,
+        html: document.getElementById('pdfTableBOL')?.innerHTML,
         loadNum: this.load.num,
       })
       .subscribe((res) => {
         if (!res.error) {
           const doc = document.getElementById('downloadBolPdf');
-          doc.click();
+          doc?.click();
         }
         this.sharedService.setLoader(false);
       });
@@ -709,17 +892,15 @@ export class LoadModalComponent implements OnInit {
 
   openPDFInvoice(): void {
     this.sharedService.setLoader(true);
-    this.getLoad(this.loadId);
     this.loadsService
       .getInvoicePdf({
-        html: document.getElementById('pdfTableInvoice').innerHTML,
+        html: document.getElementById('pdfTableInvoice')?.innerHTML,
         loadNum: this.load.num,
       })
       .subscribe((res) => {
         if (!res.error) {
           const doc = document.getElementById('downloadInvoicePdf');
-          doc.click();
-          // window.open(this.backUrl + '/invoice.pdf');
+          doc?.click();
         }
         this.sharedService.setLoader(false);
       });

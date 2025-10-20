@@ -1,8 +1,8 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {catchError, retry} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import { throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ import {throwError} from 'rxjs';
 export class LoadsService {
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem('token')!,
   });
 
   constructor(private http: HttpClient) {
@@ -67,12 +67,12 @@ export class LoadsService {
     return this.http
       .post(
         environment.apiUrl +
-          '/loads/get-all-ap/' +
-          page +
-          '/' +
-          limit +
-          '/' +
-          type,
+        '/loads/get-all-ap/' +
+        page +
+        '/' +
+        limit +
+        '/' +
+        type,
         obj,
         { headers: this.headers }
       )
@@ -122,7 +122,7 @@ export class LoadsService {
   }
 
   upload(loadId, obj): any {
-    const headers = new HttpHeaders({ token: localStorage.getItem('token') });
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
     return this.http
       .post(environment.apiUrl + '/loads/upload/' + loadId, obj, { headers })
       .pipe(retry(1), catchError(this.handleError));
@@ -131,7 +131,7 @@ export class LoadsService {
   deleteFile(loadId, fileId): any {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      token: localStorage.getItem('token'),
+      token: localStorage.getItem('token')!,
     });
     return this.http
       .delete(
@@ -144,7 +144,7 @@ export class LoadsService {
   deleteLoad(loadId): any {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      token: localStorage.getItem('token'),
+      token: localStorage.getItem('token')!,
     });
     return this.http
       .delete(environment.apiUrl + '/loads/delete/' + loadId, { headers })
@@ -152,30 +152,43 @@ export class LoadsService {
   }
 
   getRatePdf(html): any {
-    const headers = new HttpHeaders({ token: localStorage.getItem('token') });
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
     return this.http
       .post(environment.apiUrl + '/loads/pdf', html, { headers })
       .pipe(retry(1), catchError(this.handleError));
   }
 
   getRatePdfNew(html): any {
-    const headers = new HttpHeaders({ token: localStorage.getItem('token') });
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
     return this.http
       .post(environment.apiUrl + '/loads/pdf-new', html, { headers })
       .pipe(retry(1), catchError(this.handleError));
   }
 
   getBol(html): any {
-    const headers = new HttpHeaders({ token: localStorage.getItem('token') });
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
     return this.http
       .post(environment.apiUrl + '/loads/bol', html, { headers })
       .pipe(retry(1), catchError(this.handleError));
   }
 
   getInvoicePdf(html): any {
-    const headers = new HttpHeaders({ token: localStorage.getItem('token') });
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
     return this.http
       .post(environment.apiUrl + '/loads/invoice', html, { headers })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  sendMail(data: {
+    load_id: number,
+    message: string,
+    email: string,
+    cc_email: string[] | []
+  }) {
+    const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
+
+    return this.http
+      .post(environment.apiUrl + '/loads/send-invoice-email', data, { headers })
       .pipe(retry(1), catchError(this.handleError));
   }
 
@@ -191,6 +204,8 @@ export class LoadsService {
       //   `body was: ${error.error}`);
     }
     // Return an observable with a user-facing error message.
+    console.log(error);
+
     return throwError('Something bad happened; please try again later.');
   }
 }

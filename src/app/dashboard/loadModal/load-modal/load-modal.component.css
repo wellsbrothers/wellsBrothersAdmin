@@ -1,4 +1,44 @@
 .modal-content .disabled {
-  opacity: 0.5!important;
-  pointer-events: none!important;
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+}
+
+.modal-header {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.25rem;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  color: #ddd;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mail-field {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  font-size: 1.25rem;
+  color: #ddd;
+}
+
+.warn {
+  color: red;
+}
+
+.mail-cc {
+  font-size: 1.25rem;
+  color: #ddd;
 }

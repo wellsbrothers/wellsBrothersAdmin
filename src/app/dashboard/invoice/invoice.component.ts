@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SettingsService} from '../../admin/settings/settings.service';
-import {environment} from '../../../environments/environment';
+import { Component, Input, OnInit } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { SettingsService } from '../../admin/settings/settings.service';
 
 @Component({
   selector: 'app-invoice',
@@ -8,18 +8,42 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./invoice.component.css']
 })
 export class InvoiceComponent implements OnInit {
+
   @Input() load: any;
+  // @Input() date: Date;
+
+  private _date: Date | string | undefined;
+
+  @Input()
+  set date(value: Date | string | undefined) {
+    console.log(value)
+    if (!value) {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const year = today.getFullYear();
+      this._date = `${month}-${day}-${year}`
+      const plus30Days = new Date();
+      plus30Days.setDate(today.getDate() + 30);
+      this.dueDate = plus30Days;
+    } else {
+      this._date = value;
+      this.dueDate
+    }
+  }
+
+  get date(): Date | string | undefined {
+    return this._date;
+  }
+
+  @Input() dueDate: Date | string;
+
   company: any;
   url: string;
-  date: Date;
-  datePlusMonth: Date;
 
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit(): void {
-    this.date = new Date();
-    console.log(this.date);
-    this.datePlusMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));
     this.url = environment.apiUrl;
     this.settingsService.get().subscribe((res: any) => {
       if (!res.error) {
@@ -35,15 +59,19 @@ export class InvoiceComponent implements OnInit {
   }
 
   getConsName(id): any {
-    return  this.load.consigneesList ? this.load.consigneesList.filter(el => {
+    return this.load.consigneesList ? this.load.consigneesList.filter(el => {
       return el._id === id;
     })[0] : null;
   }
 
   numberWithCommas(x): string {
+    if (!x) { return ''; }
     const numParts = x.toString().split('.');
     numParts[0] = numParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return numParts.join('.');
   }
 
+  isDate(value: any): boolean {
+    return value instanceof Date && !isNaN(value.getTime());
+  }
 }

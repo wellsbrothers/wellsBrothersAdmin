@@ -1,17 +1,17 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {SharedService} from '../shared/shared.service';
-import {Router} from '@angular/router';
-import {environment} from '../../environments/environment';
-import {AdminsService} from '../admin/admins/admins.service';
-import {BranchesService} from '../admin/branches/branches.service';
-import {BrokersService} from '../admin/brokers/brokers.service';
-import {CarriersService} from '../admin/carriers/carriers.service';
-import {ConsigneesService} from '../admin/consignees/consignees.service';
-import {SheepersService} from '../admin/sheepers/sheepers.service';
-import {LoadsService} from './loads.service';
-import {ValidationsService} from '../validations/validations.service';
-import { interval, Observable, timer } from 'rxjs';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { AdminsService } from '../admin/admins/admins.service';
+import { BranchesService } from '../admin/branches/branches.service';
+import { BrokersService } from '../admin/brokers/brokers.service';
+import { CarriersService } from '../admin/carriers/carriers.service';
+import { ConsigneesService } from '../admin/consignees/consignees.service';
+import { SheepersService } from '../admin/sheepers/sheepers.service';
+import { SharedService } from '../shared/shared.service';
+import { ValidationsService } from '../validations/validations.service';
+import { LoadsService } from './loads.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -66,16 +66,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   timer: any;
   sub: any;
   constructor(private sharedService: SharedService,
-              private loadsService: LoadsService,
-              private validationsService: ValidationsService,
-              private brokersService: BrokersService,
-              private consigneesService: ConsigneesService,
-              private sheepersService: SheepersService,
-              public el: ElementRef,
-              private carriersService: CarriersService,
-              private adminsService: AdminsService,
-              private branchesService: BranchesService,
-              private router: Router) {
+    private loadsService: LoadsService,
+    private validationsService: ValidationsService,
+    private brokersService: BrokersService,
+    private consigneesService: ConsigneesService,
+    private sheepersService: SheepersService,
+    public el: ElementRef,
+    private carriersService: CarriersService,
+    private adminsService: AdminsService,
+    private branchesService: BranchesService,
+    private router: Router) {
     sharedService.role$.subscribe((val: number) => {
       this.role = val;
     });
@@ -87,15 +87,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     sharedService.percentage$.subscribe((val: number) => {
       this.percentage = val;
     });
-    sharedService.getJSON().subscribe( (res: any) => {
+    sharedService.getJSON().subscribe((res: any) => {
       this.states = res;
     });
   }
   ngOnInit(): void {
     this.adminId = JSON.parse(localStorage.getItem('admin'))._id,
-    this.sharedService.role$.subscribe((val: number) => {
-      this.role = val;
-    });
+      this.sharedService.role$.subscribe((val: number) => {
+        this.role = val;
+      });
     this.searchBroker = {
       text: '',
       type: 'searchWord'
@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       text: '',
       type: 'searchWord'
     };
-    this.sharedService.setModalAddOrEdtit({add: true, loadId: ''});
+    this.sharedService.setModalAddOrEdtit({ add: true, loadId: '' });
     this.backUrl = environment.apiUrl;
     this.page = 1;
     this.limit = 20;
@@ -122,10 +122,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchTD = [false, false, false, false, false, false, false, false];
     this.setSearchFilter();
     this.getAdmins();
-    this.getLoads();
+    this.getLoads(true);
     this.setergedLoads();
 
-    this.sub = timer(0, 10*60*1000).pipe(
+    this.sub = timer(0, 10 * 60 * 1000).pipe(
       map(() => {
         this.page = 1;
         this.getLoads(); // load data contains the http request
@@ -139,7 +139,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   searchBrokersStatus(): void {
-    this.brokersService.searchBrokersStatus({field: this.searchBroker.type, text: this.searchBroker.text}).subscribe( (res: any) => {
+    this.brokersService.searchBrokersStatus({ field: this.searchBroker.type, text: this.searchBroker.text }).subscribe((res: any) => {
       if (!res.error) {
         this.broker = res.data;
       }
@@ -147,7 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   searchCarrierStatus(): void {
-    this.carriersService.searchCarrierReview({field: this.searchCarrier.type, text: this.searchCarrier.text}).subscribe( (res: any) => {
+    this.carriersService.searchCarrierReview({ field: this.searchCarrier.type, text: this.searchCarrier.text }).subscribe((res: any) => {
       if (!res.error) {
         this.carrierWithStatus = res.data;
         if (!this.carrierWithStatus.review) {
@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   updatecarrierReview(): void {
-    this.carriersService.updatecarrierReview(this.carrierWithStatus).subscribe( (res: any) => {
+    this.carriersService.updatecarrierReview(this.carrierWithStatus).subscribe((res: any) => {
       if (!res.error) {
         this.carrierWithStatus = res.data;
       }
@@ -182,7 +182,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   expoertExcel(): void {
-    this.loadsService.expoertExcel(this.search).subscribe( (res: any) => {
+    this.loadsService.expoertExcel(this.search).subscribe((res: any) => {
       if (!res.error) {
         const download = document.getElementById('downloadXlsx');
         download.click();
@@ -214,25 +214,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.getLoads();
   }
-  getLoads(): void {
+
+  getLoads(isFromInit = false): void {
     this.sharedService.setLoader(true);
     this.sharedService.loadCreatedFunc(false);
-    this.loadsService.getList(this.page, this.limit, this.search).subscribe( (res: any) => {
+
+    if (isFromInit && !this.search.dateMin) {
+      const firstDayOfCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        .toISOString()
+        .slice(0, 10);
+      this.search.dateMin = firstDayOfCurrentMonth;
+    }
+
+    this.loadsService.getList(this.page, this.limit, this.search).subscribe((res: any) => {
       if (!res.error) {
         this.loads = res.data;
         this.total = res.total;
         this.sum = res.sum;
       }
+      if (isFromInit) { this.search.dateMin = '' }
       this.sharedService.setLoader(false);
     });
   }
+
   getReport(): void {
     this.sharedService.setLoader(true);
     if (this.search.adminId && this.search.adminId != null &&
       this.search.dateMin && this.search.dateMin != null &&
       this.search.dateMax && this.search.dateMax != null) {
-      this.loadsService.getReport({adminId: this.search.adminId, dateMin: this.search.dateMin, dateMax: this.search.dateMax} )
-        .subscribe( (res: any) => {
+      this.loadsService.getReport({ adminId: this.search.adminId, dateMin: this.search.dateMin, dateMax: this.search.dateMax })
+        .subscribe((res: any) => {
           if (!res.error) {
             this.reportSumBrokerRate = 0;
             this.reportSumCarrierFee = 0;
@@ -251,7 +262,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.sharedService.setLoader(false);
     } else {
       this.sharedService.setLoader(false);
-      this.notiFuncion({error: true, message: 'Please Choose Dispatcher, Date From And Date To'});
+      this.notiFuncion({ error: true, message: 'Please Choose Dispatcher, Date From And Date To' });
     }
 
   }
@@ -276,7 +287,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   getAdmins(): void {
     if (this.role !== 2) {
-      this.adminsService.getAll().subscribe( (res: any) => {
+      this.adminsService.getAll().subscribe((res: any) => {
         if (!res.error) {
           this.admins = res.data;
         }
@@ -284,7 +295,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
   addMergedLoad(): void {
-    this.mergedLoads.push({loadNumber: null});
+    this.mergedLoads.push({ loadNumber: null });
     this.mergedValidateError.push(false);
   }
   removeMergedLoad(i): void {
@@ -293,15 +304,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   currentpage(n: number): void {
     this.page = n;
-    this.getLoads();
+    this.getLoads(true);
   }
   next(): void {
     this.page++;
-    this.getLoads();
+    this.getLoads(true);
   }
   prev(): void {
     this.page--;
-    this.getLoads();
+    this.getLoads(true);
   }
   logout(): void {
     localStorage.removeItem('admin');
@@ -342,9 +353,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.mergedLoads.forEach((el, ind) => {
       this.mergedValidateError[ind] = isNotEmpty.test(el.loadNumber) && !isNumber.test(el.loadNumber) && el.loadNumber !== 0;
     });
-    
+
     if (this.mergedValidateError.indexOf(true) === -1) {
-      this.loadsService.getListByLoadNumbers(loadNums).subscribe( (res: any) => {
+      this.loadsService.getListByLoadNumbers(loadNums).subscribe((res: any) => {
         if (!res.error) {
           console.log(res.data);
           if (res.data.length === 0) {
@@ -369,7 +380,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.load = response;
             console.log(this.load);
             setTimeout(() => {
-              this.loadsService.getRatePdf({html: document.getElementById('pdfTable1').innerHTML, loadNum: this.load.num })
+              this.loadsService.getRatePdf({ html: document.getElementById('pdfTable1').innerHTML, loadNum: this.load.num })
                 .subscribe((resp: any) => {
                   if (!resp.error) {
                     const doc = document.getElementById('downloadRatePdf1');

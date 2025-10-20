@@ -1,72 +1,218 @@
 <!--loadmodal-->
-<div class="modal fade" [ngClass]="loadModal.show ? 'show' : ''" [ngStyle]="{'display' : loadModal.show ? 'block': 'none'}" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  [ngClass]="loadModal.show ? 'show' : ''"
+  [ngStyle]="{ display: loadModal.show ? 'block' : 'none' }"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content bg-custom-color">
       <div class="modal-header">
         <h5 class="modal-title fs-16 text-light" id="exampleModalLabel">
           Load
         </h5>
-        <h5  class="modal-title ml-5">
-          <label *ngIf="role !== 2 || !load.locked" for="tonu" (click)="setValidation()" class="tonu-style" [ngClass]="load.tonu ? 'tonu-checked' : ''">TONU
-            <input type="checkbox" id="tonu" name="tonu" class="d-none" [(ngModel)]="load.tonu">
+        <h5 class="modal-title ml-5">
+          <label
+            *ngIf="role !== 2 || !load.locked"
+            for="tonu"
+            (click)="setValidation()"
+            class="tonu-style"
+            [ngClass]="load.tonu ? 'tonu-checked' : ''"
+            >TONU
+            <input
+              type="checkbox"
+              id="tonu"
+              name="tonu"
+              class="d-none"
+              [(ngModel)]="load.tonu"
+            />
           </label>
-          <span *ngIf="role === 2 && load.locked" class="tonu-style" [ngClass]="load.tonu ? 'tonu-checked' : ''">TONU
+          <span
+            *ngIf="role === 2 && load.locked"
+            class="tonu-style"
+            [ngClass]="load.tonu ? 'tonu-checked' : ''"
+            >TONU
           </span>
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"  (click)="loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="
+            loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()
+          "
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body bg-light">
-        <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="row no-margin">
+        <div
+          [ngClass]="role === 2 && load.locked ? 'disabled' : ''"
+          class="row no-margin"
+        >
           <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="loadNumber">Load#</label>
-              <input *ngIf="role !== 2" type="number"
-                     class="form-control" id="loadNumber" name="loadNumber" [(ngModel)]="load.num">
-              <div *ngIf="role === 2" class="form-control" name="loadNumber">{{load.num}}</div>
+              <input
+                *ngIf="role !== 2"
+                type="number"
+                class="form-control"
+                id="loadNumber"
+                name="loadNumber"
+                [(ngModel)]="load.num"
+              />
+              <div *ngIf="role === 2" class="form-control" name="loadNumber">
+                {{ load.num }}
+              </div>
             </div>
           </div>
           <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label [ngClass]="validationLoad.brocker_id ? 'text-danger' : ''">
-                Broker
-                <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="openModalAddBroker()"></i>
+                Customer
+                <i
+                  *ngIf="role !== 2 || !load.locked"
+                  class="fas fa-plus-circle text-success"
+                  (click)="openModalAddBroker()"
+                ></i>
               </label>
-              <label *ngIf="role !== 2 || !load.locked" for="brokerType1" class="ml-3">By name
-                <input type="radio" id="brokerType1" name="brokerType" value="searchWord" [(ngModel)]="searchBroker.type">
+              <label
+                *ngIf="role !== 2 || !load.locked"
+                for="brokerType1"
+                class="ml-3"
+                >By name
+                <input
+                  type="radio"
+                  id="brokerType1"
+                  name="brokerType"
+                  value="searchWord"
+                  [(ngModel)]="searchBroker.type"
+                />
               </label>
-              <label *ngIf="role !== 2 || !load.locked" for="brokerType2">By MCNo
-                <input type="radio" id="brokerType2" name="brokerType" value="mc" [(ngModel)]="searchBroker.type">
+              <label *ngIf="role !== 2 || !load.locked" for="brokerType2"
+                >By MCNo
+                <input
+                  type="radio"
+                  id="brokerType2"
+                  name="brokerType"
+                  value="mc"
+                  [(ngModel)]="searchBroker.type"
+                />
               </label>
-              <ng-select *ngIf="role !== 2 || !load.locked"  class="custom" [(ngModel)]="load.brocker_id" (search) = "searchBrokers($event)">
-                <ng-option *ngFor="let broker of brokers" [value]="broker._id">{{broker.name}}</ng-option>
+              <ng-select
+                *ngIf="role !== 2 || !load.locked"
+                class="custom"
+                [(ngModel)]="load.brocker_id"
+                (search)="searchBrokers($event)"
+              >
+                <ng-option
+                  *ngFor="let broker of brokers"
+                  [value]="broker._id"
+                  >{{ broker.name }}</ng-option
+                >
               </ng-select>
-              <p class="text-danger" *ngIf="validationLoad.brocker_id">Broker is required</p>
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.broker[0].name}}</div>
+              <p class="text-danger" *ngIf="validationLoad.brocker_id">
+                Broker is required
+              </p>
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.broker[0].name }}
+              </div>
             </div>
           </div>
-          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12" *ngIf="role !== 2">
+          <div
+            class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12"
+            *ngIf="role !== 2"
+          >
             <div class="form-group" *ngIf="admins">
               <label for="dispatchername">Dispatcher Name</label>
-              <select name="dispatchername" id="dispatchername" class="form-control" [(ngModel)]="load.admin_id">
-                <option *ngFor="let admin of admins" value="{{admin._id}}">{{admin.username}} - {{admin.note}}</option>
+              <select
+                name="dispatchername"
+                id="dispatchername"
+                class="form-control"
+                [(ngModel)]="load.admin_id"
+              >
+                <option *ngFor="let admin of admins" value="{{ admin._id }}">
+                  {{ admin.username }} - {{ admin.note }}
+                </option>
               </select>
             </div>
           </div>
-          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12" *ngIf="role !== 2">
-            <div class="form-group ">
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.invoice.date}}</div>
-              <div *ngIf="role !== 2 || !load.locked" class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch1" [(ngModel)]="load.invoice.bool">
-                <label class="custom-control-label" for="customSwitch1">UN INVOICE/INV PIF</label>
+          <div
+            class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"
+            *ngIf="role !== 2"
+          >
+            <div class="form-group">
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.invoice.date }}
               </div>
-              <div class="custom-control custom-switch" *ngIf="role === 2 && load.locked" >
-                <input type="checkbox" class="custom-control-input" id="customSwi" disabled [(ngModel)]="load.invoice.bool">
-                <label class="custom-control-label" for="customSwi">UN INVOICE/INV PIF</label>
+
+              <div
+                *ngIf="role !== 2 || !load.locked"
+                class="custom-control custom-switch"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="customSwitch1"
+                  [(ngModel)]="load.invoice.bool"
+                />
+                <label class="custom-control-label" for="customSwitch1"
+                  >UN INVOICE/INV PIF</label
+                >
               </div>
-              <input *ngIf="role !== 2 || !load.locked" type="date"  placeholder="mm/dd/yyyy" class="form-control mt-2"  [(ngModel)]="load.invoice.date">
-              
+
+              <div
+                class="custom-control custom-switch"
+                *ngIf="role === 2 && load.locked"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="customSwi"
+                  disabled
+                  [(ngModel)]="load.invoice.bool"
+                />
+                <label class="custom-control-label" for="customSwi"
+                  >UN INVOICE/INV PIF</label
+                >
+              </div>
+
+              <input
+                *ngIf="role !== 2 || !load.locked"
+                type="date"
+                placeholder="mm/dd/yyyy"
+                class="form-control mt-2"
+                [(ngModel)]="load.invoice.date"
+                (ngModelChange)="onDateChange($event)"
+              />
+
+              <!-- Dropdown -->
+              <select
+                *ngIf="role !== 2 || !load.locked"
+                class="form-control mt-2"
+                [(ngModel)]="invoiceTerm"
+                (change)="onInvoiceTermChange()"
+              >
+                <option value="Due Upon Receipt">Due Upon Receipt</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+                <option value="custom">Custom</option>
+              </select>
+
+              <!-- Custom days input -->
+              <input
+                *ngIf="invoiceTerm === 'custom'"
+                type="number"
+                class="form-control mt-2"
+                placeholder="Enter days"
+                [(ngModel)]="customDays"
+                (input)="onCustomDaysChange()"
+              />
             </div>
           </div>
           <!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
@@ -79,66 +225,124 @@
               <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.branch[0].name}}</div>
             </div>
           </div> -->
-          
 
-<!--        </div>-->
-<!--        <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="row no-margin">-->
+          <!--        </div>-->
+          <!--        <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="row no-margin">-->
           <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
-              <label [ngClass]="validationLoad.broker_rate ? 'text-danger' : ''" for="brokerRae">Broker Rate</label>
-              <input *ngIf="role !== 2 || !load.locked"
-                     type="number"
-                     name="brokerRae"
-                     id="brokerRae"
-                     class="form-control"
-                     (keyup)="oalCustomerInvoicFunc()"
-                     [(ngModel)]="load.broker_rate">
-              <p class="text-danger" *ngIf="validationLoad.broker_rate">Broker Rate is required</p>
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.broker_rate}}</div>
+              <label
+                [ngClass]="validationLoad.broker_rate ? 'text-danger' : ''"
+                for="brokerRae"
+                >Customer Rate</label
+              >
+              <input
+                *ngIf="role !== 2 || !load.locked"
+                type="number"
+                name="brokerRae"
+                id="brokerRae"
+                class="form-control"
+                (keyup)="oalCustomerInvoicFunc()"
+                [(ngModel)]="load.broker_rate"
+              />
+              <p class="text-danger" *ngIf="validationLoad.broker_rate">
+                Broker Rate is required
+              </p>
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.broker_rate }}
+              </div>
             </div>
           </div>
-          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12" *ngIf="role !== 2">
-            <div class="form-group row no-margin border rounded p-1" *ngFor="let otherCharg of load.other_charges; let i = index">
+          <div
+            class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"
+            *ngIf="role !== 2"
+          >
+            <div
+              class="form-group row no-margin border rounded p-1"
+              *ngFor="let otherCharg of load.other_charges; let i = index"
+            >
               <label class="col-12">
                 Other Charges
-                <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="addOtherCharge()"></i>
-                <i class="fas fa-minus-circle text-danger" (click)="removeOtherCharge(i); oalCustomerInvoicFunc()"
-                   *ngIf="load.other_charges.length > 1 && (role !== 2 || !load.locked)"></i>
+                <i
+                  *ngIf="role !== 2 || !load.locked"
+                  class="fas fa-plus-circle text-success"
+                  (click)="addOtherCharge()"
+                ></i>
+                <i
+                  class="fas fa-minus-circle text-danger"
+                  (click)="removeOtherCharge(i); oalCustomerInvoicFunc()"
+                  *ngIf="
+                    load.other_charges.length > 1 &&
+                    (role !== 2 || !load.locked)
+                  "
+                ></i>
               </label>
-              <div class="col-8 pl-1  pr-1">
-                <input *ngIf="role !== 2 || !load.locked" type="text" name="brokerRaeText{{i}}"
-                       id="brokerRateText{{i}}" class="form-control" placeholder="Note" [(ngModel)]="otherCharg.note">
-                <div  *ngIf="role === 2 && load.locked" class="form-control">{{otherCharg.note}}</div>
+              <div class="col-8 pl-1 pr-1">
+                <input
+                  *ngIf="role !== 2 || !load.locked"
+                  type="text"
+                  name="brokerRaeText{{ i }}"
+                  id="brokerRateText{{ i }}"
+                  class="form-control"
+                  placeholder="Note"
+                  [(ngModel)]="otherCharg.note"
+                />
+                <div *ngIf="role === 2 && load.locked" class="form-control">
+                  {{ otherCharg.note }}
+                </div>
               </div>
-              <div class="col-4 pl-1  pr-1">
-                <input *ngIf="role !== 2 || !load.locked"
-                        type="number"
-                       name="brokerRaeNumber{{i}}"
-                       id="brokerRaeNumber"
-                       class="form-control"
-                       (keyup)="oalCustomerInvoicFunc()"
-                       placeholder="Price"
-                       [(ngModel)]="otherCharg.price">
-                <div  *ngIf="role === 2 && load.locked" class="form-control">{{otherCharg.price}}</div>
+              <div class="col-4 pl-1 pr-1">
+                <input
+                  *ngIf="role !== 2 || !load.locked"
+                  type="number"
+                  name="brokerRaeNumber{{ i }}"
+                  id="brokerRaeNumber"
+                  class="form-control"
+                  (keyup)="oalCustomerInvoicFunc()"
+                  placeholder="Price"
+                  [(ngModel)]="otherCharg.price"
+                />
+                <div *ngIf="role === 2 && load.locked" class="form-control">
+                  {{ otherCharg.price }}
+                </div>
               </div>
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
-              <label [ngClass]="validationLoad.broker_load ? 'text-danger' : ''" for="brokerLoad">Broker Load#</label>
-              <input *ngIf="role !== 2 || !load.locked" type="text" class="form-control" id="brokerLoad"
-                     name="brokerLoad" [(ngModel)]="load.broker_load">
-              <p class="text-danger" *ngIf="validationLoad.broker_load">Broker Load is required</p>
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.broker_load}}</div>
+              <label
+                [ngClass]="validationLoad.broker_load ? 'text-danger' : ''"
+                for="brokerLoad"
+                >Customer Load#</label
+              >
+              <input
+                *ngIf="role !== 2 || !load.locked"
+                type="text"
+                class="form-control"
+                id="brokerLoad"
+                name="brokerLoad"
+                [(ngModel)]="load.broker_load"
+              />
+              <p class="text-danger" *ngIf="validationLoad.broker_load">
+                Customer Load is required
+              </p>
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.broker_load }}
+              </div>
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="proNumber">Pro number</label>
-              <input type="text" name="proNumber" id="proNumber" class="form-control" [(ngModel)]="load.proNumber">
+              <input
+                type="text"
+                name="proNumber"
+                id="proNumber"
+                class="form-control"
+                [(ngModel)]="load.proNumber"
+              />
             </div>
           </div>
-          
+
           <!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12" *ngIf="role !== 2">
             <div class="form-group">
               <label for="totalCustomrInvoice">Total Customer Invoice</label>
@@ -148,50 +352,112 @@
             </div>
           </div> -->
         </div>
-        <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="row no-margin">
+        <div
+          [ngClass]="role === 2 && load.locked ? 'disabled' : ''"
+          class="row no-margin"
+        >
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label [ngClass]="validationLoad.carrier_id ? 'text-danger' : ''">
                 <b>Carrier</b>
-                <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success"  id="open-carrier-m" (click)="openModalAddCarrier()"></i>
+                <i
+                  *ngIf="role !== 2 || !load.locked"
+                  class="fas fa-plus-circle text-success"
+                  id="open-carrier-m"
+                  (click)="openModalAddCarrier()"
+                ></i>
               </label>
-              <label *ngIf="role !== 2 || !load.locked" for="type3" class="ml-3">
+              <label
+                *ngIf="role !== 2 || !load.locked"
+                for="type3"
+                class="ml-3"
+              >
                 By Name
-                <input type="radio" name="carrierSearchType" [(ngModel)]="searchCarrier.type" value="searchWord" id="type3">
+                <input
+                  type="radio"
+                  name="carrierSearchType"
+                  [(ngModel)]="searchCarrier.type"
+                  value="searchWord"
+                  id="type3"
+                />
               </label>
               <label *ngIf="role !== 2 || !load.locked" for="type4">
                 By MCNo
-                <input type="radio" name="carrierSearchType" [(ngModel)]="searchCarrier.type" value="mc" id="type4">
+                <input
+                  type="radio"
+                  name="carrierSearchType"
+                  [(ngModel)]="searchCarrier.type"
+                  value="mc"
+                  id="type4"
+                />
               </label>
-              <ng-select *ngIf="role !== 2 || !load.locked"  class="custom" [(ngModel)]="load.carrier_id" (search) = "searchCarrierFunc($event)">
-                <ng-option *ngFor="let carrier of carriers" [value]="carrier._id">{{carrier.companyName}}</ng-option>
+              <ng-select
+                *ngIf="role !== 2 || !load.locked"
+                class="custom"
+                [(ngModel)]="load.carrier_id"
+                (search)="searchCarrierFunc($event)"
+              >
+                <ng-option
+                  *ngFor="let carrier of carriers"
+                  [value]="carrier._id"
+                  >{{ carrier.companyName }}</ng-option
+                >
               </ng-select>
-              <p class="text-danger" *ngIf="validationLoad.carrier_id">Carrier is required</p>
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.carrier[0].companyName}}</div>
+              <p class="text-danger" *ngIf="validationLoad.carrier_id">
+                Carrier is required
+              </p>
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.carrier[0].companyName }}
+              </div>
             </div>
           </div>
           <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group row no-margin border rounded p-1" *ngFor="let lineHoul of load.line_houles; let i = index">
+            <div
+              class="form-group row no-margin border rounded p-1"
+              *ngFor="let lineHoul of load.line_houles; let i = index"
+            >
               <label class="col-12">
                 Line Houl
-                <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="addlineHoul()"></i>
-                <i class="fas fa-minus-circle text-danger" (click)="removelineHoul(i);"
-                   *ngIf="load.line_houles.length > 1 && (role !== 2 || !load.locked)"></i>
+                <i
+                  *ngIf="role !== 2 || !load.locked"
+                  class="fas fa-plus-circle text-success"
+                  (click)="addlineHoul()"
+                ></i>
+                <i
+                  class="fas fa-minus-circle text-danger"
+                  (click)="removelineHoul(i)"
+                  *ngIf="
+                    load.line_houles.length > 1 && (role !== 2 || !load.locked)
+                  "
+                ></i>
               </label>
-              <div class="col-8 pl-1  pr-1">
-                <input *ngIf="role !== 2 || !load.locked" type="text" name="lineHoul{{i}}"
-                       id="lineHoul{{i}}" class="form-control" placeholder="Note" [(ngModel)]="lineHoul.note">
-                <div  *ngIf="role === 2 && load.locked" class="form-control">{{lineHoul.note}}</div>
+              <div class="col-8 pl-1 pr-1">
+                <input
+                  *ngIf="role !== 2 || !load.locked"
+                  type="text"
+                  name="lineHoul{{ i }}"
+                  id="lineHoul{{ i }}"
+                  class="form-control"
+                  placeholder="Note"
+                  [(ngModel)]="lineHoul.note"
+                />
+                <div *ngIf="role === 2 && load.locked" class="form-control">
+                  {{ lineHoul.note }}
+                </div>
               </div>
-              <div class="col-4 pl-1  pr-1">
-                <input *ngIf="role !== 2 || !load.locked"
-                        type="number"
-                       name="lineHoul{{i}}"
-                       id="lineHoulNumber"
-                       class="form-control"
-                       placeholder="Price"
-                       [(ngModel)]="lineHoul.price">
-                <div  *ngIf="role === 2 && load.locked" class="form-control">{{lineHoul.price}}</div>
+              <div class="col-4 pl-1 pr-1">
+                <input
+                  *ngIf="role !== 2 || !load.locked"
+                  type="number"
+                  name="lineHoul{{ i }}"
+                  id="lineHoulNumber"
+                  class="form-control"
+                  placeholder="Price"
+                  [(ngModel)]="lineHoul.price"
+                />
+                <div *ngIf="role === 2 && load.locked" class="form-control">
+                  {{ lineHoul.price }}
+                </div>
               </div>
             </div>
             <!-- <div class="form-group">
@@ -202,21 +468,38 @@
               <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.carrier_fee}}</div>
             </div> -->
           </div>
-          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12" *ngIf="role !== 2">
+          <div
+            class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12"
+            *ngIf="role !== 2"
+          >
             <div class="form-group">
               <label for="carrierGrossPay">Carrier Pay</label>
-              <input *ngIf="role !== 2 || !load.locked" type="number" class="form-control"
-                     name="carrierGrossPay" id="carrierGrossPay" [(ngModel)]="load.carrier_gross_pay">
-              <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.carrier_gross_pay}}</div>
+              <input
+                *ngIf="role !== 2 || !load.locked"
+                type="number"
+                class="form-control"
+                name="carrierGrossPay"
+                id="carrierGrossPay"
+                [(ngModel)]="load.carrier_gross_pay"
+              />
+              <div *ngIf="role === 2 && load.locked" class="form-control">
+                {{ load.carrier_gross_pay }}
+              </div>
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="equipment">Truck type</label>
-              <input type="text" name="equipment" id="equipment" class="form-control" [(ngModel)]="load.equipment">
+              <input
+                type="text"
+                name="equipment"
+                id="equipment"
+                class="form-control"
+                [(ngModel)]="load.equipment"
+              />
             </div>
           </div>
-          
+
           <!-- <div class="col-xl-1 col-lg-1 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="size">Size</label>
@@ -239,28 +522,65 @@
         <div class="row no-margin">
           <div class="col-12" *ngIf="role !== 2">
             <div class="card">
-              <div class="card-header  pb-0 border-bottom-0">
-                <label class="col-12" *ngIf="!load.products || load.products.length === 0">
+              <div class="card-header pb-0 border-bottom-0">
+                <label
+                  class="col-12"
+                  *ngIf="!load.products || load.products.length === 0"
+                >
                   Products
-                  <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="addProduct()"></i>
+                  <i
+                    *ngIf="role !== 2 || !load.locked"
+                    class="fas fa-plus-circle text-success"
+                    (click)="addProduct()"
+                  ></i>
                 </label>
               </div>
-              <div class="form-group row no-margin border rounded p-1" *ngFor="let product of load.products; let i = index">
+              <div
+                class="form-group row no-margin border rounded p-1"
+                *ngFor="let product of load.products; let i = index"
+              >
                 <label class="col-12">
-                  Product {{i + 1}}
-                  <i *ngIf="(role !== 2 || !load.locked) && load.products.length < 5" class="fas fa-plus-circle text-success" (click)="addProduct()"></i>
-                  <i class="fas fa-minus-circle text-danger" (click)="removeProduct(i);"
-                    *ngIf="role !== 2 || !load.locked"></i>
+                  Product {{ i + 1 }}
+                  <i
+                    *ngIf="
+                      (role !== 2 || !load.locked) && load.products.length < 5
+                    "
+                    class="fas fa-plus-circle text-success"
+                    (click)="addProduct()"
+                  ></i>
+                  <i
+                    class="fas fa-minus-circle text-danger"
+                    (click)="removeProduct(i)"
+                    *ngIf="role !== 2 || !load.locked"
+                  ></i>
                 </label>
                 <div class="col-4 pl-1 pr-1">
-                  <input *ngIf="role !== 2 || !load.locked" type="text" name="productName{{i}}"
-                        id="productName{{i}}" class="form-control" placeholder="Name" [(ngModel)]="product.name">
-                  <div  *ngIf="role === 2 && load.locked" class="form-control">{{product.name}}</div>
+                  <input
+                    *ngIf="role !== 2 || !load.locked"
+                    type="text"
+                    name="productName{{ i }}"
+                    id="productName{{ i }}"
+                    class="form-control"
+                    placeholder="Name"
+                    [(ngModel)]="product.name"
+                  />
+                  <div *ngIf="role === 2 && load.locked" class="form-control">
+                    {{ product.name }}
+                  </div>
                 </div>
                 <div class="col-8 pl-1 pr-1">
-                  <input *ngIf="role !== 2 || !load.locked" type="text" name="productNote{{i}}"
-                        id="productNote{{i}}" class="form-control" placeholder="Note" [(ngModel)]="product.note">
-                  <div  *ngIf="role === 2 && load.locked" class="form-control">{{product.note}}</div>
+                  <input
+                    *ngIf="role !== 2 || !load.locked"
+                    type="text"
+                    name="productNote{{ i }}"
+                    id="productNote{{ i }}"
+                    class="form-control"
+                    placeholder="Note"
+                    [(ngModel)]="product.note"
+                  />
+                  <div *ngIf="role === 2 && load.locked" class="form-control">
+                    {{ product.note }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -272,104 +592,257 @@
         <div class="row no-margin">
           <div class="col-12">
             <div class="card">
-              <div class="card-header  pb-0 border-bottom-0">
-                <ul class="nav nav-tabs"  *ngIf="role !== 2 || !load.locked">
-                  <li class="nav-item" *ngFor="let sheeper of load.sheeper; let i = index">
-                    <a class="nav-link " [ngClass]="sheepersTab[i] ? 'active' : ''" href="javascript:void(0)" (click)="changeSheepersTab(i)">
-                      Shipper {{i+1}}
-                      <i (click)="removeSheeperTab(i)" class="fas fa-minus-circle text-danger" *ngIf="load.sheeper.length > 1"></i>
+              <div class="card-header pb-0 border-bottom-0">
+                <ul class="nav nav-tabs" *ngIf="role !== 2 || !load.locked">
+                  <li
+                    class="nav-item"
+                    *ngFor="let sheeper of load.sheeper; let i = index"
+                  >
+                    <a
+                      class="nav-link"
+                      [ngClass]="sheepersTab[i] ? 'active' : ''"
+                      href="javascript:void(0)"
+                      (click)="changeSheepersTab(i)"
+                    >
+                      Shipper {{ i + 1 }}
+                      <i
+                        (click)="removeSheeperTab(i)"
+                        class="fas fa-minus-circle text-danger"
+                        *ngIf="load.sheeper.length > 1"
+                      ></i>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" (click)="addSheeperTab()" href="javascript:void(0)">Add</a>
+                    <a
+                      class="nav-link"
+                      (click)="addSheeperTab()"
+                      href="javascript:void(0)"
+                      >Add</a
+                    >
                   </li>
                 </ul>
                 <ul class="nav nav-tabs" *ngIf="role === 2 && load.locked">
-                  <li class="nav-item" *ngFor="let sheeper of load.sheeper; let i = index"  (click)="changeSheepersTab(i)">
-                    <a class="nav-link " [ngClass]="sheepersTab[i] ? 'active' : ''" href="javascript:void(0)" >
-                      Shipper {{i+1}}
+                  <li
+                    class="nav-item"
+                    *ngFor="let sheeper of load.sheeper; let i = index"
+                    (click)="changeSheepersTab(i)"
+                  >
+                    <a
+                      class="nav-link"
+                      [ngClass]="sheepersTab[i] ? 'active' : ''"
+                      href="javascript:void(0)"
+                    >
+                      Shipper {{ i + 1 }}
                     </a>
                   </li>
                 </ul>
               </div>
-              <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="card-body" *ngFor="let sheeper of load.sheeper; let i = index" [ngStyle]="{'display': sheepersTab[i] ? 'block' : 'none'}">
-                <div class="row" >
+              <div
+                [ngClass]="role === 2 && load.locked ? 'disabled' : ''"
+                class="card-body"
+                *ngFor="let sheeper of load.sheeper; let i = index"
+                [ngStyle]="{ display: sheepersTab[i] ? 'block' : 'none' }"
+              >
+                <div class="row">
                   <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.sheeper[i].sheeper_id ? 'text-danger' : ''">
+                      <label
+                        [ngClass]="
+                          validationLoad.sheeper[i].sheeper_id
+                            ? 'text-danger'
+                            : ''
+                        "
+                      >
                         Shipper
-                        <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="openModalAddSheeper()"></i>
+                        <i
+                          *ngIf="role !== 2 || !load.locked"
+                          class="fas fa-plus-circle text-success"
+                          (click)="openModalAddSheeper()"
+                        ></i>
                       </label>
-                      <label *ngIf="role !== 2 || !load.locked" for="sheepr-type3{{i}}" class="ml-3">
+                      <label
+                        *ngIf="role !== 2 || !load.locked"
+                        for="sheepr-type3{{ i }}"
+                        class="ml-3"
+                      >
                         By Name
-                        <input type="radio" name="searchShipperType{{i}}" [(ngModel)]="searchSheeper.type" value="searchWord" id="sheepr-type3{{i}}">
+                        <input
+                          type="radio"
+                          name="searchShipperType{{ i }}"
+                          [(ngModel)]="searchSheeper.type"
+                          value="searchWord"
+                          id="sheepr-type3{{ i }}"
+                        />
                       </label>
-                      <label *ngIf="role !== 2 || !load.locked" for="sheepr-type4{{i}}">
+                      <label
+                        *ngIf="role !== 2 || !load.locked"
+                        for="sheepr-type4{{ i }}"
+                      >
                         By Address
-                        <input type="radio" name="searchShipperType{{i}}" [(ngModel)]="searchSheeper.type" value="address.address" id="sheepr-type4{{i}}">
+                        <input
+                          type="radio"
+                          name="searchShipperType{{ i }}"
+                          [(ngModel)]="searchSheeper.type"
+                          value="address.address"
+                          id="sheepr-type4{{ i }}"
+                        />
                       </label>
-                      <ng-select  *ngIf="role !== 2 || !load.locked" class="custom" [(ngModel)]="sheeper.sheeper_id" name="name{{i}}" (search)="searchSheeprFunc($event)" (change)="setSheeperAddress(i)">
-                        <ng-option *ngFor="let sh of sheepers" [value]="sh._id" >
-                          <p class="no-margin"><b>{{sh.name}}</b></p>
-                          <p class="no-margin">{{sh.address.address}}-{{sh.address.city}}-{{sh.address.state}}-{{sh.address.zip}}</p>
+                      <ng-select
+                        *ngIf="role !== 2 || !load.locked"
+                        class="custom"
+                        [(ngModel)]="sheeper.sheeper_id"
+                        name="name{{ i }}"
+                        (search)="searchSheeprFunc($event)"
+                        (change)="setSheeperAddress(i)"
+                      >
+                        <ng-option *ngFor="let sh of sheepers" [value]="sh._id">
+                          <p class="no-margin">
+                            <b>{{ sh.name }}</b>
+                          </p>
+                          <p class="no-margin">
+                            {{ sh.address.address }}-{{ sh.address.city }}-{{
+                              sh.address.state
+                            }}-{{ sh.address.zip }}
+                          </p>
                         </ng-option>
                       </ng-select>
-                      <p class="text-danger" *ngIf="validationLoad.sheeper[i].sheeper_id">Sheeper is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.sheepersList[i].name}}</div>
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.sheeper[i].sheeper_id"
+                      >
+                        Sheeper is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ load.sheepersList[i].name }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.sheeper[i].address ? 'text-danger' : ''" for="sheepr-location{{i}}">
+                      <label
+                        [ngClass]="
+                          validationLoad.sheeper[i].address ? 'text-danger' : ''
+                        "
+                        for="sheepr-location{{ i }}"
+                      >
                         Location
                       </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepr-location"
-                             id="sheepr-location{{i}}" class="form-control" [(ngModel)]="sheeper.address">
-                      <p class="text-danger" *ngIf="validationLoad.sheeper[i].address">Sheeper address is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.address}}</div>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepr-location"
+                        id="sheepr-location{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="sheeper.address"
+                      />
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.sheeper[i].address"
+                      >
+                        Sheeper address is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.address }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.sheeper[i].date ? 'text-danger' : ''" for="sheepr-date{{i}}">
+                      <label
+                        [ngClass]="
+                          validationLoad.sheeper[i].date ? 'text-danger' : ''
+                        "
+                        for="sheepr-date{{ i }}"
+                      >
                         Date
                       </label>
-                      <input placeholder="mm/dd/yyyy"  *ngIf="role !== 2 || !load.locked" type="date" name="sheepr-date"
-                              id="sheepr-date{{i}}" class="form-control" [(ngModel)]="sheeper.date">
-                      <p class="text-danger" *ngIf="validationLoad.sheeper[i].date">Sheeper datte is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.date| date: 'MM/dd/yyyy'}}</div>
+                      <input
+                        placeholder="mm/dd/yyyy"
+                        *ngIf="role !== 2 || !load.locked"
+                        type="date"
+                        name="sheepr-date"
+                        id="sheepr-date{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="sheeper.date"
+                      />
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.sheeper[i].date"
+                      >
+                        Sheeper datte is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.date | date : "MM/dd/yyyy" }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="sheepr-time{{i}}">
-                        Time
-                      </label>
-                      <input  placeholder="24:00"  *ngIf="role !== 2 || !load.locked" type="text"  class="form-control"
-                              name="sheepr-time{{i}}" id="sheepr-time{{i}}" [(ngModel)]="sheeper.time">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.time}}</div>
+                      <label for="sheepr-time{{ i }}"> Time </label>
+                      <input
+                        placeholder="24:00"
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        class="form-control"
+                        name="sheepr-time{{ i }}"
+                        id="sheepr-time{{ i }}"
+                        [(ngModel)]="sheeper.time"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.time }}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="sheepingNotes{{i}}">
-                        Notes
-                      </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepingNotes"
-                             id="sheepingNotes{{i}}" class="form-control" [(ngModel)]="sheeper.note">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.note}}</div>
+                      <label for="sheepingNotes{{ i }}"> Notes </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepingNotes"
+                        id="sheepingNotes{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="sheeper.note"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.note }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="sheepingNotes{{i}}">
-                        Phone
-                      </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepingPhone"
-                             id="sheepingPhone{{i}}" class="form-control" [(ngModel)]="sheeper.phone">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.phone}}</div>
+                      <label for="sheepingNotes{{ i }}"> Phone </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepingPhone"
+                        id="sheepingPhone{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="sheeper.phone"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.phone }}
+                      </div>
                     </div>
                   </div>
                   <!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
@@ -382,31 +855,63 @@
                       <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.poNumber}}</div>
                     </div>
                   </div>-->
-                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
-                      <div class="form-group">
-                        <label for="sheepr-qty{{i}}">
-                          Units
-                        </label>
-                        <input *ngIf="role !== 2 || !load.locked" type="number" name="sheepr-qty"
-                              id="sheepr-qty{{i}}" class="form-control" [(ngModel)]="sheeper.qty">
-                        <div  *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.qty}}</div>
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label for="sheepr-qty{{ i }}"> Units </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="number"
+                        name="sheepr-qty"
+                        id="sheepr-qty{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="sheeper.qty"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.qty }}
                       </div>
                     </div>
-                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                          <label for="sheepr-weights{{i}}">Weight (lbs)</label>
-                          <input *ngIf="role !== 2 || !load.locked" type="number" class="form-control" name="sheepr-weights" id="sheepr-weights{{i}}" [(ngModel)]="sheeper.weight">
-                          <div *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.weight}}</div>
+                  </div>
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label for="sheepr-weights{{ i }}">Weight (lbs)</label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="number"
+                        class="form-control"
+                        name="sheepr-weights"
+                        id="sheepr-weights{{ i }}"
+                        [(ngModel)]="sheeper.weight"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.weight }}
                       </div>
                     </div>
-                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12">
-                      <div class="form-group">
-                        <label for="">Special Instructions</label>
-                        <textarea *ngIf="role !== 2 || !load.locked" name="specialServices" id="specialServices{{i}}" rows="2"
-                          [(ngModel)]="sheeper.specialServices" class="form-control"></textarea>
-                        <div *ngIf="role === 2 && load.locked" class="form-control">{{sheeper.specialServices}}</div>
+                  </div>
+                  <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label for="">Special Instructions</label>
+                      <textarea
+                        *ngIf="role !== 2 || !load.locked"
+                        name="specialServices"
+                        id="specialServices{{ i }}"
+                        rows="2"
+                        [(ngModel)]="sheeper.specialServices"
+                        class="form-control"
+                      ></textarea>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ sheeper.specialServices }}
                       </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -419,104 +924,260 @@
             <div class="card">
               <div class="card-header pb-0 border-bottom-0">
                 <ul *ngIf="role !== 2 || !load.locked" class="nav nav-tabs">
-                  <li class="nav-item" *ngFor="let consignee of load.consignee; let i = index">
-                    <a class="nav-link " [ngClass]="consigneesTab[i] ? 'active' : ''" href="javascript:void(0)" (click)="changeConsigneeTab(i)">
-                      Consignee {{i+1}}
-                      <i (click)="removeConsigneeTab(i)" class="fas fa-minus-circle text-danger" *ngIf="load.consignee.length > 1"></i>
+                  <li
+                    class="nav-item"
+                    *ngFor="let consignee of load.consignee; let i = index"
+                  >
+                    <a
+                      class="nav-link"
+                      [ngClass]="consigneesTab[i] ? 'active' : ''"
+                      href="javascript:void(0)"
+                      (click)="changeConsigneeTab(i)"
+                    >
+                      Consignee {{ i + 1 }}
+                      <i
+                        (click)="removeConsigneeTab(i)"
+                        class="fas fa-minus-circle text-danger"
+                        *ngIf="load.consignee.length > 1"
+                      ></i>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" (click)="addConsigneeTab()" href="javascript:void(0)">Add</a>
+                    <a
+                      class="nav-link"
+                      (click)="addConsigneeTab()"
+                      href="javascript:void(0)"
+                      >Add</a
+                    >
                   </li>
                 </ul>
                 <ul *ngIf="role === 2 && load.locked" class="nav nav-tabs">
-                  <li class="nav-item" *ngFor="let consignee of load.consignee; let i = index"  (click)="changeConsigneeTab(i)">
-                    <a class="nav-link " [ngClass]="consigneesTab[i] ? 'active' : ''" href="javascript:void(0)">
-                      Consignee {{i+1}}
+                  <li
+                    class="nav-item"
+                    *ngFor="let consignee of load.consignee; let i = index"
+                    (click)="changeConsigneeTab(i)"
+                  >
+                    <a
+                      class="nav-link"
+                      [ngClass]="consigneesTab[i] ? 'active' : ''"
+                      href="javascript:void(0)"
+                    >
+                      Consignee {{ i + 1 }}
                     </a>
                   </li>
                 </ul>
               </div>
-              <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="card-body" *ngFor="let consignee of load.consignee; let i = index" [ngStyle]="{'display': consigneesTab[i] ? 'block' : 'none'}">
-                <div class="row" >
+              <div
+                [ngClass]="role === 2 && load.locked ? 'disabled' : ''"
+                class="card-body"
+                *ngFor="let consignee of load.consignee; let i = index"
+                [ngStyle]="{ display: consigneesTab[i] ? 'block' : 'none' }"
+              >
+                <div class="row">
                   <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.consignee[i].consignee_id ? 'text-danger' : ''">
+                      <label
+                        [ngClass]="
+                          validationLoad.consignee[i].consignee_id
+                            ? 'text-danger'
+                            : ''
+                        "
+                      >
                         Consignee
-                        <i *ngIf="role !== 2 || !load.locked" class="fas fa-plus-circle text-success" (click)="openModalAddConsignee()"></i>
+                        <i
+                          *ngIf="role !== 2 || !load.locked"
+                          class="fas fa-plus-circle text-success"
+                          (click)="openModalAddConsignee()"
+                        ></i>
                       </label>
-                      <label *ngIf="role !== 2 || !load.locked" for="consignee-type3{{i}}" class="ml-3">
+                      <label
+                        *ngIf="role !== 2 || !load.locked"
+                        for="consignee-type3{{ i }}"
+                        class="ml-3"
+                      >
                         By Name
-                        <input type="radio" name="searchConsigneeType{{i}}" [(ngModel)]="searchConsignee.type" value="searchWord" id="consignee-type3{{i}}">
+                        <input
+                          type="radio"
+                          name="searchConsigneeType{{ i }}"
+                          [(ngModel)]="searchConsignee.type"
+                          value="searchWord"
+                          id="consignee-type3{{ i }}"
+                        />
                       </label>
-                      <label *ngIf="role !== 2 || !load.locked" for="consignee-type4{{i}}">
+                      <label
+                        *ngIf="role !== 2 || !load.locked"
+                        for="consignee-type4{{ i }}"
+                      >
                         By Address
-                        <input type="radio" name="searchConsigneeType{{i}}" [(ngModel)]="searchConsignee.type" value="address.address" id="consignee-type4{{i}}">
+                        <input
+                          type="radio"
+                          name="searchConsigneeType{{ i }}"
+                          [(ngModel)]="searchConsignee.type"
+                          value="address.address"
+                          id="consignee-type4{{ i }}"
+                        />
                       </label>
-                      <ng-select *ngIf="role !== 2 || !load.locked"
-                                 class="custom" [(ngModel)]="consignee.consignee_id" name="name{{i}}"
-                                 (search)="searchConsigneeFunc($event)" (change)="setConsigneeAddress(i)">
-                        <ng-option *ngFor="let co of consignees" [value]="co._id" >
-                          <p class="no-margin"><b>{{co.name}}</b></p>
-                          <p class="no-margin">{{co.address.address}}-{{co.address.city}}-{{co.address.state}}-{{co.address.zip}}</p>
+                      <ng-select
+                        *ngIf="role !== 2 || !load.locked"
+                        class="custom"
+                        [(ngModel)]="consignee.consignee_id"
+                        name="name{{ i }}"
+                        (search)="searchConsigneeFunc($event)"
+                        (change)="setConsigneeAddress(i)"
+                      >
+                        <ng-option
+                          *ngFor="let co of consignees"
+                          [value]="co._id"
+                        >
+                          <p class="no-margin">
+                            <b>{{ co.name }}</b>
+                          </p>
+                          <p class="no-margin">
+                            {{ co.address.address }}-{{ co.address.city }}-{{
+                              co.address.state
+                            }}-{{ co.address.zip }}
+                          </p>
                         </ng-option>
                       </ng-select>
-                      <p class="text-danger" *ngIf="validationLoad.consignee[i].consignee_id">Consignne is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{load.consigneesList[i].name}}</div>
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.consignee[i].consignee_id"
+                      >
+                        Consignne is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ load.consigneesList[i].name }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.consignee[i].address ? 'text-danger' : ''" for="sheepr-location{{i}}">
+                      <label
+                        [ngClass]="
+                          validationLoad.consignee[i].address
+                            ? 'text-danger'
+                            : ''
+                        "
+                        for="sheepr-location{{ i }}"
+                      >
                         Location
                       </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepr-location"
-                             id="Consignee-location{{i}}" class="form-control" [(ngModel)]="consignee.address">
-                      <p class="text-danger" *ngIf="validationLoad.consignee[i].address">Consignee loacation is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.address}}</div>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepr-location"
+                        id="Consignee-location{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="consignee.address"
+                      />
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.consignee[i].address"
+                      >
+                        Consignee loacation is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.address }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label [ngClass]="validationLoad.consignee[i].date ? 'text-danger' : ''" for="consignee-date{{i}}">
+                      <label
+                        [ngClass]="
+                          validationLoad.consignee[i].date ? 'text-danger' : ''
+                        "
+                        for="consignee-date{{ i }}"
+                      >
                         Date
                       </label>
-                      <input placeholder="mm/dd/yyyy" *ngIf="role !== 2 || !load.locked" type="date" name="sheepr-date"
-                             id="consignee-date{{i}}" class="form-control" [(ngModel)]="consignee.date">
-                      <p class="text-danger" *ngIf="validationLoad.consignee[i].date">Consignee date is required</p>
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.date | date: 'MM/dd/yyyy'}}</div>
+                      <input
+                        placeholder="mm/dd/yyyy"
+                        *ngIf="role !== 2 || !load.locked"
+                        type="date"
+                        name="sheepr-date"
+                        id="consignee-date{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="consignee.date"
+                      />
+                      <p
+                        class="text-danger"
+                        *ngIf="validationLoad.consignee[i].date"
+                      >
+                        Consignee date is required
+                      </p>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.date | date : "MM/dd/yyyy" }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="consignee-time{{i}}">
-                        Time
-                      </label>
-                      <input  placeholder="24:00" *ngIf="role !== 2 || !load.locked" type="text"  class="form-control"
-                             name="sheepr-time" id="consignee-time{{i}}" [(ngModel)]="consignee.time">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.time}}</div>
+                      <label for="consignee-time{{ i }}"> Time </label>
+                      <input
+                        placeholder="24:00"
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        class="form-control"
+                        name="sheepr-time"
+                        id="consignee-time{{ i }}"
+                        [(ngModel)]="consignee.time"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.time }}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="consigneeNotes{{i}}">
-                        Notes
-                      </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepingNotes"
-                             id="consigneeNotes{{i}}" class="form-control" [(ngModel)]="consignee.note">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.note}}</div>
+                      <label for="consigneeNotes{{ i }}"> Notes </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepingNotes"
+                        id="consigneeNotes{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="consignee.note"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.note }}
+                      </div>
                     </div>
                   </div>
                   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="consigneeNotes{{i}}">
-                        Phone
-                      </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="text" name="sheepingPhones"
-                             id="consigneePhones{{i}}" class="form-control" [(ngModel)]="consignee.phone">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.phone}}</div>
+                      <label for="consigneeNotes{{ i }}"> Phone </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="text"
+                        name="sheepingPhones"
+                        id="consigneePhones{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="consignee.phone"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.phone }}
+                      </div>
                     </div>
                   </div>
                   <!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
@@ -531,32 +1192,63 @@
                   </div>-->
                   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
-                      <label for="consignee-qty{{i}}">
-                        Units
-                      </label>
-                      <input *ngIf="role !== 2 || !load.locked" type="number" name="sheepr-qty"
-                             id="consignee-qty{{i}}" class="form-control" [(ngModel)]="consignee.qty">
-                      <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.qty}}</div>
+                      <label for="consignee-qty{{ i }}"> Units </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="number"
+                        name="sheepr-qty"
+                        id="consignee-qty{{ i }}"
+                        class="form-control"
+                        [(ngModel)]="consignee.qty"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.qty }}
+                      </div>
                     </div>
                   </div>
-                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
-                      <div class="form-group">
-                        <label for="consignee-weights{{i}}">
-                          Weight (lbs)
-                        </label>
-                        <input *ngIf="role !== 2 || !load.locked" type="number" class="form-control"
-                              name="consignee-weights" id="consignee-weights{{i}}" [(ngModel)]="consignee.weight">
-                        <div  *ngIf="role === 2 && load.locked" class="form-control">{{consignee.weight}}</div>
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label for="consignee-weights{{ i }}">
+                        Weight (lbs)
+                      </label>
+                      <input
+                        *ngIf="role !== 2 || !load.locked"
+                        type="number"
+                        class="form-control"
+                        name="consignee-weights"
+                        id="consignee-weights{{ i }}"
+                        [(ngModel)]="consignee.weight"
+                      />
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.weight }}
                       </div>
                     </div>
-                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12">
-                      <div class="form-group">
-                        <label for="">Special Instructions</label>
-                        <textarea *ngIf="role !== 2 || !load.locked" name="specialServices" id="specialServices{{i}}" rows="2"
-                          [(ngModel)]="consignee.specialServices" class="form-control"></textarea>
-                        <div *ngIf="role === 2 && load.locked" class="form-control">{{consignee.specialServices}}</div>
+                  </div>
+                  <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label for="">Special Instructions</label>
+                      <textarea
+                        *ngIf="role !== 2 || !load.locked"
+                        name="specialServices"
+                        id="specialServices{{ i }}"
+                        rows="2"
+                        [(ngModel)]="consignee.specialServices"
+                        class="form-control"
+                      ></textarea>
+                      <div
+                        *ngIf="role === 2 && load.locked"
+                        class="form-control"
+                      >
+                        {{ consignee.specialServices }}
                       </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -573,90 +1265,377 @@
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="bolDate">BOL Date</label>
-              <input placeholder="mm/dd/yyyy" type="date" name="bolDate" id="bolDate" class="form-control" [(ngModel)]="load.bol_date">
+              <input
+                placeholder="mm/dd/yyyy"
+                type="date"
+                name="bolDate"
+                id="bolDate"
+                class="form-control"
+                [(ngModel)]="load.bol_date"
+              />
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="processDate">Process Date</label>
-              <input placeholder="mm/dd/yyyy" type="date" name="processDate" id="processDate" class="form-control" [(ngModel)]="load.process_date">
+              <input
+                placeholder="mm/dd/yyyy"
+                type="date"
+                name="processDate"
+                id="processDate"
+                class="form-control"
+                [(ngModel)]="load.process_date"
+              />
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="endDate">End Date</label>
-              <input placeholder="mm/dd/yyyy" type="date" name="endDate" id="endDate" class="form-control" [(ngModel)]="load.end_date">
+              <input
+                placeholder="mm/dd/yyyy"
+                type="date"
+                name="endDate"
+                id="endDate"
+                class="form-control"
+                [(ngModel)]="load.end_date"
+              />
             </div>
           </div>
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
               <label for="check">Check</label>
-              <input type="text" name="check" id="check" class="form-control" [(ngModel)]="load.check">
+              <input
+                type="text"
+                name="check"
+                id="check"
+                class="form-control"
+                [(ngModel)]="load.check"
+              />
             </div>
           </div>
         </div>
 
         <div class="row no-margin mt-2">
-          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 text-center pt-20" *ngIf="!loadMoalAddOrEdtit">
+          <div
+            class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 text-center pt-20"
+            *ngIf="!loadMoalAddOrEdtit"
+          >
             <div class="form-grou" *ngIf="role !== 2">
-              <label for="payUnPay" class="unpayed " [ngClass]="load.pay ? 'payed' : ''">
-                {{load.pay ? 'Paid' : 'Unpaid'}}
-                <input type="checkbox" id="payUnPay" class="d-none" [(ngModel)]="load.pay">
+              <label
+                for="payUnPay"
+                class="unpayed"
+                [ngClass]="load.pay ? 'payed' : ''"
+              >
+                {{ load.pay ? "Paid" : "Unpaid" }}
+                <input
+                  type="checkbox"
+                  id="payUnPay"
+                  class="d-none"
+                  [(ngModel)]="load.pay"
+                />
               </label>
             </div>
           </div>
-          <div [ngClass]="role === 2 && load.locked ? 'disabled' : ''" class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-20" *ngIf="!loadMoalAddOrEdtit">
+          <div
+            [ngClass]="role === 2 && load.locked ? 'disabled' : ''"
+            class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-20"
+            *ngIf="!loadMoalAddOrEdtit"
+          >
             <span><b> Driver Pay</b> </span>
             <label for="driverUnPay">
-              <input  *ngIf="role !== 2 || !load.locked" class="d-none" type="checkbox" id="driverUnPay"  [(ngModel)]="load.driver_pay">
-              <span class="bg-danger rounded-circle p-3-5 text-light" [ngClass]="load.driver_pay ? 'p-8-10' : ''">
-                  <i class="far fa-hand-paper"></i>
+              <input
+                *ngIf="role !== 2 || !load.locked"
+                class="d-none"
+                type="checkbox"
+                id="driverUnPay"
+                [(ngModel)]="load.driver_pay"
+              />
+              <span
+                class="bg-danger rounded-circle p-3-5 text-light"
+                [ngClass]="load.driver_pay ? 'p-8-10' : ''"
+              >
+                <i class="far fa-hand-paper"></i>
               </span>
-              <span class="bg-success rounded-circle p-3-5 text-light" [ngClass]="!load.driver_pay ? 'p-8-10' : ''">
-                  <i class="fas fa-check"></i>
+              <span
+                class="bg-success rounded-circle p-3-5 text-light"
+                [ngClass]="!load.driver_pay ? 'p-8-10' : ''"
+              >
+                <i class="fas fa-check"></i>
               </span>
             </label>
             <label *ngIf="role !== 2">
-              <input class="d-none" type="checkbox" id="unlock" [(ngModel)]="load.locked">
-              <span class="rounded-circle p-3-5 text-dark ml-3" *ngIf="!load.locked">
-                  <i class="fas fa-lock-open fs-20"></i>
+              <input
+                class="d-none"
+                type="checkbox"
+                id="unlock"
+                [(ngModel)]="load.locked"
+              />
+              <span
+                class="rounded-circle p-3-5 text-dark ml-3"
+                *ngIf="!load.locked"
+              >
+                <i class="fas fa-lock-open fs-20"></i>
               </span>
-              <span class="rounded-circle p-3-5 text-danger ml-3" *ngIf="load.locked">
-                  <i class="fas fa-lock fs-20"></i>
+              <span
+                class="rounded-circle p-3-5 text-danger ml-3"
+                *ngIf="load.locked"
+              >
+                <i class="fas fa-lock fs-20"></i>
               </span>
             </label>
           </div>
-          <div  *ngIf="role !== 2 || !load.locked" class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-15 text-center">
+          <div
+            *ngIf="role !== 2 || !load.locked"
+            class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-15 text-center"
+          >
             <span id="file_upload_button">
-                <i class="fas fa-cloud-upload-alt" (click)="showFileUpload = true"></i>
+              <i
+                class="fas fa-cloud-upload-alt"
+                (click)="showFileUpload = true; $event.stopPropagation()"
+              ></i>
             </span>
-            <span id="file_download_button"  *ngIf="!loadMoalAddOrEdtit">
-                <i class="fas fa-cloud-download-alt"  (click)="showFiles = true"></i>
+            <span id="file_download_button" *ngIf="!loadMoalAddOrEdtit">
+              <i
+                class="fas fa-cloud-download-alt"
+                (click)="showFiles = true; $event.stopPropagation()"
+              ></i>
             </span>
           </div>
-          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-15 text-center" *ngIf="role === 0">
+          <div
+            class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 pt-15 text-center"
+            *ngIf="role === 0"
+          >
             <span *ngIf="!loadMoalAddOrEdtit">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="customStatus" [(ngModel)]="load.status">
-                  <label class="custom-control-label" for="customStatus">Status</label>
-                </div>
+              <div class="custom-control custom-switch">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="customStatus"
+                  [(ngModel)]="load.status"
+                />
+                <label class="custom-control-label" for="customStatus"
+                  >Status</label
+                >
+              </div>
             </span>
           </div>
         </div>
 
-        <!--file-upload-->
-        <div class="m-i-m" [ngStyle]="{'display' : showFileUpload ? 'block': 'none'}">
-          <div class="m-i-m-content">
+        <!-- mailing modal -->
+        <div
+          class="m-i-m"
+          [ngStyle]="{ display: mailingModalShow ? 'block' : 'none' }"
+        >
+          <div class="m-i-m-content-large" id="mailingModal">
             <p class="text-right text-light p-10-20">
-              <i class="fas fa-times" id="m-i-m-close" (click)="showFileUpload = false"></i>
+              <i
+                class="fas fa-times"
+                id="m-i-m-close"
+                (click)="mailingModalShow = false"
+              ></i>
+            </p>
+
+            <form #f="ngForm" (ngSubmit)="onSendMail(f)">
+              <div class="header-row">
+                <div class="modal-header">
+                  Email for load #{{ this.load.num }}
+                </div>
+
+                <div class="mail-field pr-3">
+                  <!-- Customer Email -->
+                  <div class="pr-3">Customer email</div>
+                  <input
+                    type="email"
+                    name="email"
+                    [(ngModel)]="mailTo"
+                    required
+                    email
+                    #email="ngModel"
+                    placeholder="Enter customer email"
+                    autocomplete="off"
+                  />
+                  <div *ngIf="email.invalid && email.touched">
+                    <small *ngIf="email.errors?.required" class="warn"
+                      >Email is required</small
+                    >
+                    <small *ngIf="email.errors?.email" class="warn"
+                      >Invalid email format</small
+                    >
+                  </div>
+
+                  <!-- Dynamic CC Emails -->
+                  <div class="mail-cc mt-2">
+                    <div class="pr-3 mb-1">CC Emails</div>
+
+                    <div
+                      *ngFor="let cc of ccEmails; let i = index"
+                      class="d-flex align-items-center mb-1"
+                    >
+                      <input
+                        type="email"
+                        name="ccEmail{{ i }}"
+                        [(ngModel)]="cc.email"
+                        email
+                        placeholder="Enter CC email"
+                        class="form-control mx-2"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        #ccCtrl="ngModel"
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        (click)="removeCC(i)"
+                      >
+                        &times;
+                      </button>
+
+                      <!-- optional error message -->
+                      <div
+                        *ngIf="ccCtrl.invalid && ccCtrl.touched"
+                        class="warn ml-2"
+                      >
+                        <small *ngIf="ccCtrl.errors?.email" class="warn"
+                          >Invalid email format</small
+                        >
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm mt-1"
+                      (click)="addCC()"
+                    >
+                      + Add CC
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Textarea -->
+              <div class="w-100 mt-3">
+                <textarea
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="defaultMailText"
+                  rows="15"
+                  class="w-100"
+                ></textarea>
+              </div>
+
+              <!-- PDF Viewers -->
+              <div class="d-flex mt-3 w-100">
+                <div>
+                  <div class="modal-header text-center w-100">
+                    Rate Confirmation
+                  </div>
+                  <div (click)="openPDFNew()">
+                    <pdf-viewer
+                      *ngIf="ratePDF"
+                      [src]="ratePDF"
+                      [render-text]="false"
+                      [original-size]="false"
+                      [autoresize]="false"
+                      [show-borders]="true"
+                      [page]="1"
+                      [show-all]="false"
+                      style="min-height: 500px; width: 320px"
+                    ></pdf-viewer>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="modal-header text-center w-100">
+                    Bill of Lading (BOL)
+                  </div>
+                  <div (click)="openPDFBOL()">
+                    <pdf-viewer
+                      *ngIf="bolPDF"
+                      [src]="bolPDF"
+                      [render-text]="false"
+                      [original-size]="false"
+                      [autoresize]="false"
+                      [show-borders]="true"
+                      [page]="1"
+                      [show-all]="false"
+                      style="min-height: 500px; width: 320px"
+                    ></pdf-viewer>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="modal-header text-center w-100">Invoice</div>
+                  <div (click)="openPDFInvoice()">
+                    <pdf-viewer
+                      *ngIf="invoicePDF"
+                      [src]="invoicePDF"
+                      [render-text]="false"
+                      [original-size]="false"
+                      [autoresize]="false"
+                      [show-borders]="true"
+                      [page]="1"
+                      [show-all]="false"
+                      style="min-height: 500px; width: 320px"
+                    ></pdf-viewer>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="modal-buttons mt-3">
+                <button type="submit" class="btn btn-success ml-4">Send</button>
+                <button
+                  type="button"
+                  class="btn btn-danger ml-4"
+                  (click)="mailingModalShow = false"
+                >
+                  Cancel
+                </button>
+                <span id="file_upload_button">
+                  <i
+                    class="fas fa-cloud-upload-alt"
+                    (click)="showFileUpload = true; $event.stopPropagation()"
+                  ></i>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!--file-upload-->
+        <div
+          class="m-i-m"
+          [ngStyle]="{ display: showFileUpload ? 'block' : 'none' }"
+        >
+          <div class="m-i-m-content" id="fileUploadModal">
+            <p class="text-right text-light p-10-20">
+              <i
+                class="fas fa-times"
+                id="m-i-m-close"
+                (click)="showFileUpload = false"
+              ></i>
             </p>
             <div>
               <div class="load-file-uploader">
-                <input type="file" multiple (change)=" onChange($event)" id="file">
-                <p *ngIf="fileCount.length === 0">Drag your files here or click in this area.</p>
-                <ul class="list-group list-group-flush" *ngIf="fileCount.length > 0">
-                  <li class="list-group-item text-center text-light bg-transparent" *ngFor="let fileName of fileCount; let g = index">
-                    {{g+1}}) {{fileName.name}}
+                <input
+                  type="file"
+                  multiple
+                  (change)="onChange($event)"
+                  id="file"
+                />
+                <p *ngIf="fileCount.length === 0">
+                  Drag your files here or click in this area.
+                </p>
+                <ul
+                  class="list-group list-group-flush"
+                  *ngIf="fileCount.length > 0"
+                >
+                  <li
+                    class="list-group-item text-center text-light bg-transparent"
+                    *ngFor="let fileName of fileCount; let g = index"
+                  >
+                    {{ g + 1 }}) {{ fileName.name }}
                   </li>
                 </ul>
               </div>
@@ -665,47 +1644,76 @@
         </div>
 
         <!--file-download-->
-        <div class="m-fd-m" [ngStyle]="{'display' : showFiles ? 'block': 'none'}">
-          <div class="m-fd-m-content">
+        <div
+          class="m-fd-m"
+          [ngStyle]="{ display: showFiles ? 'block' : 'none' }"
+        >
+          <div class="m-fd-m-content" id="fileUploadViewModal">
             <p class="text-right text-light p-10-20">
-              <i class="fas fa-times" id="m-fd-m-close" (click)="showFiles = false"></i>
+              <i
+                class="fas fa-times"
+                id="m-fd-m-close"
+                (click)="showFiles = false"
+              ></i>
             </p>
             <div class="row no-margin p-1">
               <div class="col-12">
                 <div *ngIf="showDeleteFileText" class="text-center">
                   <p class="text-danger text-center">Are you sure? !!!</p>
                   <p class="text-center">
-                    <button class="btn btn-success" (click)="showDeleteFileText = false">NO</button>
-                    <button class="btn btn-danger ml-2" (click)="deleteUploadFile()">Yes</button>
+                    <button
+                      class="btn btn-success"
+                      (click)="showDeleteFileText = false"
+                    >
+                      NO
+                    </button>
+                    <button
+                      class="btn btn-danger ml-2"
+                      (click)="deleteUploadFile()"
+                    >
+                      Yes
+                    </button>
                   </p>
                 </div>
                 <table class="table text-light" *ngIf="load.files.length > 0">
                   <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Added By</th>
-                    <th scope="col">File</th>
-                    <th scope="col">
-                      Delete
-                    </th>
-                  </tr>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Added By</th>
+                      <th scope="col">File</th>
+                      <th scope="col">Delete</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let loadFile of load.files; let k = index">
-                    <th scope="col">{{k+1}}</th>
-                    <th scope="col">{{getFileUploadedAdminName(loadFile.addedBy)}}</th>
-                    <th scope="col">
-                      <a href="{{backUrl + '/' + loadFile.filePath}}" target="_blank" >{{loadFile.filename}}.{{loadFile.filetype}}</a>
-                    </th>
-                    <th scope="col">
-                      <button class="btn btn-danger" (click)="showDeleteFileText = true; deleteLoadFileId = loadFile.file_id">
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </th>
-                  </tr>
+                    <tr *ngFor="let loadFile of load.files; let k = index">
+                      <th scope="col">{{ k + 1 }}</th>
+                      <th scope="col">
+                        {{ getFileUploadedAdminName(loadFile.addedBy) }}
+                      </th>
+                      <th scope="col">
+                        <a
+                          href="{{ backUrl + '/' + loadFile.filePath }}"
+                          target="_blank"
+                          >{{ loadFile.filename }}.{{ loadFile.filetype }}</a
+                        >
+                      </th>
+                      <th scope="col">
+                        <button
+                          class="btn btn-danger"
+                          (click)="
+                            showDeleteFileText = true;
+                            deleteLoadFileId = loadFile.file_id
+                          "
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </th>
+                    </tr>
                   </tbody>
                 </table>
-                <p class="text-light fs-20" *ngIf="load.files.length === 0"> No Files</p>
+                <p class="text-light fs-20" *ngIf="load.files.length === 0">
+                  No Files
+                </p>
               </div>
             </div>
           </div>
@@ -724,54 +1732,148 @@
         <app-add-carrier></app-add-carrier>
 
         <!--Delete Modal-->
-        <div class="carrier-create-form"  [ngStyle]="{'display' : deleteLoadModal ? 'block': 'none'}">
-          <div class="shiper-reciver-content pt-4 pb-4" style="height: 184px;  width: 32%;overflow: auto;">
+        <div
+          class="carrier-create-form"
+          [ngStyle]="{ display: deleteLoadModal ? 'block' : 'none' }"
+        >
+          <div
+            class="shiper-reciver-content pt-4 pb-4"
+            style="height: 184px; width: 32%; overflow: auto"
+          >
             <div class="row">
               <div class="col-8">
                 <h4 class="text-light p-10-20">Delete Load</h4>
               </div>
               <div class="col-3 text-right text-light p-10-20">
-                <i class="fas fa-times" id="load-delete-close" (click)="deleteLoadModal = false"></i>
+                <i
+                  class="fas fa-times"
+                  id="load-delete-close"
+                  (click)="deleteLoadModal = false"
+                ></i>
               </div>
             </div>
             <div class="row">
-              <h3 class="text-danger w-100 text-center"><b class="fs-20">{{deleteLoadText}}</b></h3>
+              <h3 class="text-danger w-100 text-center">
+                <b class="fs-20">{{ deleteLoadText }}</b>
+              </h3>
 
               <div class="col-12">
                 <div class="row no-margin">
                   <div class="col-6 text-center">
-                    <button class="btn btn-success fs-20" (click)="deleteLoadModal = false">NO</button>
+                    <button
+                      class="btn btn-success fs-20"
+                      (click)="deleteLoadModal = false"
+                    >
+                      NO
+                    </button>
                   </div>
                   <div class="col-6 text-center">
-                    <button class="btn btn-danger fs-20" (click)="deleteLoad()">YES</button>
+                    <button class="btn btn-danger fs-20" (click)="deleteLoad()">
+                      YES
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
       <div class="modal-footer bg-light">
         <div class="row w-100">
           <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                    (click)="deleteLoadModal = true"
-                    *ngIf="!loadMoalAddOrEdtit && role !== 2">Delete</button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-dismiss="modal"
+              (click)="deleteLoadModal = true"
+              *ngIf="!loadMoalAddOrEdtit && role !== 2"
+            >
+              Delete
+            </button>
           </div>
-          <div class="col-xl-8 col-lg-8 col-md-5 col-sm-12 col-xs-12 text-center">
+          <div
+            class="col-xl-8 col-lg-8 col-md-5 col-sm-12 col-xs-12 text-center"
+          >
             <!-- <button type="button" class="btn btn-secondary" *ngIf="!loadMoalAddOrEdtit" (click)="openPDF()">Rate Confirmation </button>
             <a class="btn btn-secondary" style="height: 0; opacity: 0;display: none;" href="{{backUrl}}/pdf/{{load.num}}_rate.pdf" target="_blank" id="downloadRatePdf">Dowload</a> -->
-            <button type="button" class="btn btn-secondary  ml-4" *ngIf="!loadMoalAddOrEdtit" (click)="openPDFNew()">Rate Confirmation</button>
-            <a class="btn btn-secondary" style="height: 0; opacity: 0;display: none;" href="{{backUrl}}/pdf/{{load.num}}_rate_new.pdf" target="_blank" id="downloadRatePdfNew">Dowload</a>
-            <button type="button" class="btn btn-secondary ml-4" *ngIf="!loadMoalAddOrEdtit" (click)="openPDFBOL()">BOL</button>
-            <a class="btn btn-secondary" style="height: 0; opacity: 0;display: none;" href="{{backUrl}}/pdf/{{load.num}}_bol.pdf" target="_blank" id="downloadBolPdf">Dowload</a>
-            <button type="button" class="btn btn-success ml-4" *ngIf="!loadMoalAddOrEdtit" (click)="openPDFInvoice()">Invoice</button>
-            <a class="btn btn-secondary" style="height: 0; opacity: 0;display: none;" href="{{backUrl}}/pdf/{{load.num}}_invoice.pdf" target="_blank" id="downloadInvoicePdf">Dowload</a>
+            <button
+              type="button"
+              class="btn btn-secondary ml-4"
+              *ngIf="!loadMoalAddOrEdtit"
+              (click)="openPDFNew()"
+            >
+              Rate Confirmation
+            </button>
+            <a
+              class="btn btn-secondary"
+              style="height: 0; opacity: 0; display: none"
+              href="{{ backUrl }}/pdf/{{ load.num }}_rate_new.pdf"
+              target="_blank"
+              id="downloadRatePdfNew"
+              >Dowload</a
+            >
+            <button
+              type="button"
+              class="btn btn-secondary ml-4"
+              *ngIf="!loadMoalAddOrEdtit"
+              (click)="openPDFBOL()"
+            >
+              BOL
+            </button>
+            <a
+              class="btn btn-secondary"
+              style="height: 0; opacity: 0; display: none"
+              href="{{ backUrl }}/pdf/{{ load.num }}_bol.pdf"
+              target="_blank"
+              id="downloadBolPdf"
+              >Dowload</a
+            >
+            <button
+              type="button"
+              class="btn btn-success ml-4"
+              *ngIf="!loadMoalAddOrEdtit"
+              (click)="openPDFInvoice()"
+            >
+              Invoice
+            </button>
+            <a
+              class="btn btn-secondary"
+              style="height: 0; opacity: 0; display: none"
+              href="{{ backUrl }}/pdf/{{ load.num }}_invoice.pdf"
+              target="_blank"
+              id="downloadInvoicePdf"
+              >Dowload</a
+            >
+            <button
+              type="button"
+              class="btn btn-success ml-4"
+              *ngIf="!loadMoalAddOrEdtit"
+              (click)="onOpenMailingModal()"
+            >
+              Preview and Send Email
+            </button>
           </div>
-          <div class="col-xl-2 col-lg-2 col-md-5 col-sm-12 col-xs-12 text-right">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"  (click)="loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()" >Close</button>
-            <button type="button" class="btn btn-primary ml-2" *ngIf="role !== 2 || !load.locked" (click)="createLoad()">Save</button>
+          <div
+            class="col-xl-2 col-lg-2 col-md-5 col-sm-12 col-xs-12 text-right"
+          >
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              (click)="
+                loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()
+              "
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary ml-2"
+              *ngIf="role !== 2 || !load.locked"
+              (click)="createLoad()"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>
@@ -779,23 +1881,23 @@
   </div>
 </div>
 
-
 <div id="pdfTable" #pdfTable style="display: none">
-  <app-rate-confirmation  [load]="load">
-  </app-rate-confirmation>
+  <app-rate-confirmation [load]="load"> </app-rate-confirmation>
 </div>
 
 <div id="pdfTableNew" #pdfTableNew style="display: none">
-  <app-rate-confirmation-new [load]="load">
-  </app-rate-confirmation-new>
+  <app-rate-confirmation-new [load]="load"> </app-rate-confirmation-new>
 </div>
 
 <div id="pdfTableBOL" #pdfTableBOL style="display: none">
-  <app-bol [load]="load">
-  </app-bol>
+  <app-bol [load]="load"> </app-bol>
 </div>
 
-<div id="pdfTableInvoice" #pdfTableInvoice  style="display: none">
-  <app-invoice  [load]="load">
+<div id="pdfTableInvoice" #pdfTableInvoice style="display: none">
+  <app-invoice
+    [load]="load"
+    [date]="load.invoice.date"
+    [dueDate]="load.invoice.dueDate"
+  >
   </app-invoice>
 </div>
