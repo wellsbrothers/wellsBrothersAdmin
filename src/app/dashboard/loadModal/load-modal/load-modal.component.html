@@ -43,7 +43,9 @@
           data-dismiss="modal"
           aria-label="Close"
           (click)="
-            loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()
+            loadModal.show = false; 
+            loadMoalAddOrEdtit = true; 
+            setNewLoad()
           "
         >
           <span aria-hidden="true">&times;</span>
@@ -1438,7 +1440,7 @@
             <form #f="ngForm" (ngSubmit)="onSendMail(f)">
               <div class="header-row">
                 <div class="modal-header">
-                  Email for load #{{ this.load.num }}
+                  Invoice for load #{{ this.load.num }}
                 </div>
 
                 <div class="mail-field pr-3">
@@ -1524,48 +1526,10 @@
                 ></textarea>
               </div>
 
+              <div class="modal-header text-center w-100">Invoice</div>
               <!-- PDF Viewers -->
               <div class="d-flex mt-3 w-100">
                 <div>
-                  <div class="modal-header text-center w-100">
-                    Rate Confirmation
-                  </div>
-                  <div (click)="openPDFNew()">
-                    <pdf-viewer
-                      *ngIf="ratePDF"
-                      [src]="ratePDF"
-                      [render-text]="false"
-                      [original-size]="false"
-                      [autoresize]="false"
-                      [show-borders]="true"
-                      [page]="1"
-                      [show-all]="false"
-                      style="min-height: 500px; width: 320px"
-                    ></pdf-viewer>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="modal-header text-center w-100">
-                    Bill of Lading (BOL)
-                  </div>
-                  <div (click)="openPDFBOL()">
-                    <pdf-viewer
-                      *ngIf="bolPDF"
-                      [src]="bolPDF"
-                      [render-text]="false"
-                      [original-size]="false"
-                      [autoresize]="false"
-                      [show-borders]="true"
-                      [page]="1"
-                      [show-all]="false"
-                      style="min-height: 500px; width: 320px"
-                    ></pdf-viewer>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="modal-header text-center w-100">Invoice</div>
                   <div (click)="openPDFInvoice()">
                     <pdf-viewer
                       *ngIf="invoicePDF"
@@ -1579,6 +1543,47 @@
                       style="min-height: 500px; width: 320px"
                     ></pdf-viewer>
                   </div>
+                </div>
+                <div class="w-100 mt-3">
+                  <table class="table text-light" *ngIf="load.files.length > 0">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Added By</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let loadFile of load.files; let k = index">
+                        <th scope="col">{{ k + 1 }}</th>
+                        <th scope="col">
+                          {{ getFileUploadedAdminName(loadFile.addedBy) }}
+                        </th>
+                        <th scope="col">
+                          <a
+                            href="{{ backUrl + '/' + loadFile.filePath }}"
+                            target="_blank"
+                            >{{ loadFile.filename }}.{{ loadFile.filetype }}</a
+                          >
+                        </th>
+                        <th scope="col">
+                          <button
+                            class="btn btn-danger"
+                            (click)="
+                              showDeleteFileText = true;
+                              deleteLoadFileId = loadFile.file_id
+                            "
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </th>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="text-light fs-20" *ngIf="load.files.length === 0">
+                    No Files
+                  </p>
                 </div>
               </div>
 

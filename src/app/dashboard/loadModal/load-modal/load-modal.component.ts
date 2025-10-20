@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AdminsService } from '../../../admin/admins/admins.service';
 import { BranchesService } from '../../../admin/branches/branches.service';
@@ -121,7 +120,6 @@ Thank you`;
     this._defaultMailText = value;
   }
 
-
   mailTo: string = ''
   ccEmails: { email: string }[] = []; // array of objects
 
@@ -228,7 +226,6 @@ Thank you`;
       }
       this.sharedService.setLoader(false);
       this.mailingModalShow = false;
-      this.mailTo = '';
     })
 
   }
@@ -241,31 +238,15 @@ Thank you`;
     this.ccEmails.splice(index, 1);
   }
 
-
   onOpenMailingModal() {
     this.mailingModalShow = true;
     this.sharedService.setLoader(true);
 
-    // just update load once
-    // this.getLoad(this.loadId);
-
-    forkJoin([
-      this.loadsService.getRatePdfNew({
-        html: document.getElementById('pdfTableNew')?.innerHTML,
-        loadNum: this.load.num,
-      }),
-      this.loadsService.getBol({
-        html: document.getElementById('pdfTableBOL')?.innerHTML,
-        loadNum: this.load.num,
-      }),
-      this.loadsService.getInvoicePdf({
-        html: document.getElementById('pdfTableInvoice')?.innerHTML,
-        loadNum: this.load.num,
-      }),
-    ]).subscribe(
+    this.loadsService.getInvoicePdf({
+      html: document.getElementById('pdfTableInvoice')?.innerHTML,
+      loadNum: this.load.num,
+    }).subscribe(
       () => {
-        this.ratePDF = `${this.backUrl}/pdf/${this.load.num}_rate_new.pdf`;
-        this.bolPDF = `${this.backUrl}/pdf/${this.load.num}_bol.pdf`;
         this.invoicePDF = `${this.backUrl}/pdf/${this.load.num}_invoice.pdf`;
 
         this.sharedService.setLoader(false);
@@ -317,6 +298,9 @@ Thank you`;
     this.fileCount = [];
     this.sheepersTab = [true];
     this.consigneesTab = [true];
+    this.invoiceTerm = '30';
+    this.customDays = null;
+
     this.load = {
       num: 0,
       brocker_id: '',
@@ -560,6 +544,8 @@ Thank you`;
         this.carriers = res.data.carrier;
         this.sheepers = res.data.sheepersList;
         this.consignees = res.data.consigneesList;
+        this.mailTo = res.data.broker[0].email_to;
+        this.ccEmails = (res.data.broker[0].email_cc || []).map((e: string) => ({ email: e }));
         return this.load;
       } else {
         this.setNewLoad();
