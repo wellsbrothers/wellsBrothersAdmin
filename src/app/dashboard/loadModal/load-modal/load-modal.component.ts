@@ -85,32 +85,51 @@ export class LoadModalComponent implements OnInit {
     // Always regenerate based on current values
     if (this.invoiceTerm == '15' || this.invoiceTerm == '30' || this.invoiceTerm == '45') {
       return this._defaultMailText ||
-        `Hello
-Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
-PO # ${this.load?.broker_load ?? ''}
-We would like a ${this.invoiceTerm ?? ''} day ACH payment.
+        `Hello,
+Please find attached the invoice for Load #${this.load?.num ?? ''}.
+Customer Order #${this.load?.broker_load ?? ''}.
+We kindly request ${this.invoiceTerm ?? ''} day ACH payment.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
 
-Thank you`;
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`
     }
 
     if (this.invoiceTerm == 'Due Upon Receipt') {
       return this._defaultMailText ||
-        `Hello
-Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
-PO # ${this.load?.broker_load ?? ''}
-We would like the payment to be made via ACH, due upon receipt.
+        `Hello,
 
-Thank you`;
+Please find attached the invoice for Load #${this.load?.num ?? ''}.
+Customer Order #${this.load?.broker_load ?? ''}.
+We kindly request that payment be made via ACH, due upon receipt.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
+
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`;
     }
 
     if (this.invoiceTerm == 'custom') {
       return this._defaultMailText ||
-        `Hello
-Please kindly find attached the Invoice for load ${this.load?.num ?? ''}
-PO # ${this.load?.broker_load ?? ''}
-We would like a ${this.customDays ?? ''} day ACH payment.
+        `Hello,
+Please find attached the invoice for Load #${this.load?.num ?? ''}.
+Customer Order #${this.load?.broker_load ?? ''}.
+We kindly request ${this.customDays ?? ''} day ACH payment.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
 
-Thank you`;
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`;
     }
 
   }
@@ -227,7 +246,6 @@ Thank you`;
       this.sharedService.setLoader(false);
       this.mailingModalShow = false;
     })
-
   }
 
   addCC() {
