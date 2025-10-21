@@ -43,9 +43,7 @@
           data-dismiss="modal"
           aria-label="Close"
           (click)="
-            loadModal.show = false; 
-            loadMoalAddOrEdtit = true; 
-            setNewLoad()
+            loadModal.show = false; loadMoalAddOrEdtit = true; setNewLoad()
           "
         >
           <span aria-hidden="true">&times;</span>
@@ -1545,6 +1543,25 @@
                   </div>
                 </div>
                 <div class="w-100 mt-3">
+                  <div *ngIf="showDeleteFileText" class="text-center">
+                    <p class="text-danger text-center">Are you sure? !!!</p>
+                    <p class="text-center">
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        (click)="showDeleteFileText = false"
+                      >
+                        NO
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger ml-2"
+                        (click)="deleteUploadFile()"
+                      >
+                        Yes
+                      </button>
+                    </p>
+                  </div>
                   <table class="table text-light" *ngIf="load.files.length > 0">
                     <thead>
                       <tr>
@@ -1569,6 +1586,7 @@
                         </th>
                         <th scope="col">
                           <button
+                            type="button"
                             class="btn btn-danger"
                             (click)="
                               showDeleteFileText = true;
