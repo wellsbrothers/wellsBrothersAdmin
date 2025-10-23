@@ -19,10 +19,10 @@ import { LoadsService } from '../../loads.service';
 export class LoadModalComponent implements OnInit {
   @Input() loadModal: any;
 
-  @ViewChild('pdfTable') pdfTable: ElementRef;
-  @ViewChild('pdfTableNew') pdfTableNew: ElementRef;
-  @ViewChild('pdfTableBOL') pdfTableBOL: ElementRef;
-  @ViewChild('pdfTableInvoice') pdfTableInvoice: ElementRef;
+  @ViewChild('pdfTable') pdfTable: ElementRef | undefined;
+  @ViewChild('pdfTableNew') pdfTableNew: ElementRef | undefined;
+  @ViewChild('pdfTableBOL') pdfTableBOL: ElementRef | undefined;
+  @ViewChild('pdfTableInvoice') pdfTableInvoice: ElementRef | undefined;
 
   loadId: string = '';
   role: number;
@@ -68,7 +68,7 @@ export class LoadModalComponent implements OnInit {
   showFileUpload: boolean = false;
   deleteLoadModal: boolean = false;
 
-  loadMoalAddOrEdtit: boolean;
+  loadMoalAddOrEdtit: boolean | undefined;
 
   mailingModalShow: boolean = false;
 
@@ -84,8 +84,20 @@ export class LoadModalComponent implements OnInit {
   get defaultMailText(): string | undefined {
     // Always regenerate based on current values
     if (this.invoiceTerm == '15' || this.invoiceTerm == '30' || this.invoiceTerm == '45') {
-      return this._defaultMailText ||
-        `Hello,
+      if (this.load?.num == this.load?.broker_load) {
+        return `Hello,
+Please find attached the invoice for customer Order #${this.load?.broker_load ?? ''}.
+We kindly request ${this.invoiceTerm ?? ''} day ACH payment.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
+
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`
+      } else {
+        return `Hello,
 Please find attached the invoice for Load #${this.load?.num ?? ''}.
 Customer Order #${this.load?.broker_load ?? ''}.
 We kindly request ${this.invoiceTerm ?? ''} day ACH payment.
@@ -97,12 +109,24 @@ Best,
 Wells Brothers Accounting Department
 www.wellsbrothersnv.com
 1(725) 977-9992`
+      }
     }
 
     if (this.invoiceTerm == 'Due Upon Receipt') {
-      return this._defaultMailText ||
-        `Hello,
+      if (this.load?.num == this.load?.broker_load) {
+        return `Hello,
+Please find attached the invoice for customer Order #${this.load?.broker_load ?? ''}.
+We kindly request that payment be made via ACH, due upon receipt.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
 
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`;
+      } else {
+        return `Hello,
 Please find attached the invoice for Load #${this.load?.num ?? ''}.
 Customer Order #${this.load?.broker_load ?? ''}.
 We kindly request that payment be made via ACH, due upon receipt.
@@ -114,11 +138,28 @@ Best,
 Wells Brothers Accounting Department
 www.wellsbrothersnv.com
 1(725) 977-9992`;
+      }
+
     }
 
     if (this.invoiceTerm == 'custom') {
-      return this._defaultMailText ||
-        `Hello,
+      if (this.load?.num == this.load?.broker_load) {
+        return this._defaultMailText ||
+          `Hello,
+Please find attached the invoice for customer Order #${this.load?.broker_load ?? ''}.
+We kindly request ${this.customDays ?? ''} day ACH payment.
+If you have any questions regarding this invoice or payment details, please contact our accounting department at accounting@wellsbrothersnv.com.
+
+Thank you for your business and prompt attention.
+
+Best,
+Wells Brothers Accounting Department
+www.wellsbrothersnv.com
+1(725) 977-9992`;
+      }
+      else {
+        return this._defaultMailText ||
+          `Hello,
 Please find attached the invoice for Load #${this.load?.num ?? ''}.
 Customer Order #${this.load?.broker_load ?? ''}.
 We kindly request ${this.customDays ?? ''} day ACH payment.
@@ -130,8 +171,8 @@ Best,
 Wells Brothers Accounting Department
 www.wellsbrothersnv.com
 1(725) 977-9992`;
+      }
     }
-
   }
 
   set defaultMailText(value: string) {
@@ -139,7 +180,8 @@ www.wellsbrothersnv.com
     this._defaultMailText = value;
   }
 
-  mailTo: string = ''
+  mailTo: string = '';
+  mailSubject: string = '';
   ccEmails: { email: string }[] = []; // array of objects
 
 
@@ -236,6 +278,7 @@ www.wellsbrothersnv.com
       load_id: +this.load.num,
       message: this.defaultMailText,
       email: this.mailTo,
+      subject: this.mailSubject,
       cc_email: this.ccEmails
         .map(cc => cc.email)        // extract the email strings
         .filter(email => email),    // remove empty entries // remove empty
@@ -457,7 +500,7 @@ www.wellsbrothersnv.com
     });
   }
 
-  searchBrokers(e): void {
+  searchBrokers(e: any): void {
     this.brokersService
       .search({ field: this.searchBroker.type, text: e.term })
       .subscribe((res: any) => {
@@ -467,7 +510,7 @@ www.wellsbrothersnv.com
       });
   }
 
-  searchSheeprFunc(e): void {
+  searchSheeprFunc(e: any): void {
     this.sheepersService
       .search({ field: this.searchSheeper.type, text: e.term })
       .subscribe((res: any) => {
@@ -477,7 +520,7 @@ www.wellsbrothersnv.com
       });
   }
 
-  searchConsigneeFunc(e): void {
+  searchConsigneeFunc(e: any): void {
     this.consigneesService
       .search({ field: this.searchConsignee.type, text: e.term })
       .subscribe((res: any) => {
@@ -487,8 +530,8 @@ www.wellsbrothersnv.com
       });
   }
 
-  setSheeperAddress(i): void {
-    const sheeperAddres = this.sheepers.filter((el) => {
+  setSheeperAddress(i: any): void {
+    const sheeperAddres = this.sheepers.filter((el: any) => {
       return el._id === this.load.sheeper[i].sheeper_id;
     })[0];
     this.load.sheeper[
@@ -496,8 +539,8 @@ www.wellsbrothersnv.com
     ].address = `${sheeperAddres.address.address},${sheeperAddres.address.city}, ${sheeperAddres.address.state}, ${sheeperAddres.address.zip}`;
   }
 
-  setConsigneeAddress(i): void {
-    const consigneeAddres = this.consignees.filter((el) => {
+  setConsigneeAddress(i: any): void {
+    const consigneeAddres = this.consignees.filter((el: any) => {
       return el._id === this.load.consignee[i].consignee_id;
     })[0];
     this.load.consignee[
@@ -505,7 +548,7 @@ www.wellsbrothersnv.com
     ].address = `${consigneeAddres.address.address},${consigneeAddres.address.city}, ${consigneeAddres.address.state}, ${consigneeAddres.address.zip}`;
   }
 
-  searchCarrierFunc(e): void {
+  searchCarrierFunc(e: any): void {
     this.carriersService
       .search({ field: this.searchCarrier.type, text: e.term })
       .subscribe((res: any) => {
@@ -516,7 +559,7 @@ www.wellsbrothersnv.com
   }
 
   oalCustomerInvoicFunc(): void {
-    this.otherChargeSum = this.load.other_charges.reduce((a, b) => {
+    this.otherChargeSum = this.load.other_charges.reduce((a: any, b: any) => {
       return a + b.price;
     }, 0);
     this.load.total_customer_invoice =
@@ -542,7 +585,7 @@ www.wellsbrothersnv.com
         this.load = res.data;
         // this.load.invoice.date = date
 
-        this.load.sheeper.forEach((el, ind) => {
+        this.load.sheeper.forEach((el: any, ind: any) => {
           this.sheepersTab[ind] = ind === 0;
           this.validationLoad.sheeper[ind] = {
             sheeper_id: false,
@@ -550,7 +593,7 @@ www.wellsbrothersnv.com
             date: false,
           };
         });
-        this.load.consignee.forEach((el, ind) => {
+        this.load.consignee.forEach((el: any, ind: any) => {
           this.consigneesTab[ind] = ind === 0;
           this.validationLoad.consignee[ind] = {
             consignee_id: false,
@@ -573,8 +616,8 @@ www.wellsbrothersnv.com
     });
   }
 
-  getFileUploadedAdminName(id): any {
-    const username = this.load.files_addedBy.filter((el1) => {
+  getFileUploadedAdminName(id: any): any {
+    const username = this.load.files_addedBy.filter((el1: any) => {
       return id === el1._id;
     });
     return username[0]
@@ -589,7 +632,7 @@ www.wellsbrothersnv.com
       .subscribe((res: any) => {
         if (!res.error) {
           this.load.files = this.load.files.filter(
-            (el) => el.file_id !== this.deleteLoadFileId
+            (el: any) => el.file_id !== this.deleteLoadFileId
           );
           this.showDeleteFileText = false;
         }
@@ -600,7 +643,7 @@ www.wellsbrothersnv.com
   deleteLoad(): void {
     this.sharedService.setLoader(true);
     if (this.load.files.length > 0) {
-      this.load.files.forEach((el) => {
+      this.load.files.forEach((el: any) => {
         this.deleteLoadFileId = el.file_id;
         this.deleteUploadFile();
       });
@@ -630,7 +673,7 @@ www.wellsbrothersnv.com
     }
   }
 
-  removeProduct(i): void {
+  removeProduct(i: number): void {
     this.load.products.splice(i, 1);
   }
 
@@ -638,7 +681,7 @@ www.wellsbrothersnv.com
     this.load.other_charges.push({ note: '', price: 0 });
   }
 
-  removeOtherCharge(i): void {
+  removeOtherCharge(i: number): void {
     this.load.other_charges.splice(i, 1);
   }
 
@@ -646,7 +689,7 @@ www.wellsbrothersnv.com
     this.load.line_houles.push({ note: '', price: 0 });
   }
 
-  removelineHoul(i): void {
+  removelineHoul(i: number): void {
     this.load.line_houles.splice(i, 1);
   }
 
@@ -654,14 +697,14 @@ www.wellsbrothersnv.com
    * sheepers tabs
    */
   changeSheepersTab(i): void {
-    this.sheepersTab = this.sheepersTab.map((el, ind) => {
+    this.sheepersTab = this.sheepersTab.map((el: any, ind: number) => {
       return i === ind;
     });
   }
 
   addSheeperTab(): void {
     this.sheepersTab.push(false);
-    this.sheepersTab = this.sheepersTab.map((el, ind) => {
+    this.sheepersTab = this.sheepersTab.map((el: any, ind: number) => {
       return ind === this.sheepersTab.length - 1;
     });
     this.load.sheeper.push({
@@ -694,14 +737,14 @@ www.wellsbrothersnv.com
    * consignee tabs
    */
   changeConsigneeTab(i): void {
-    this.consigneesTab = this.consigneesTab.map((el, ind) => {
+    this.consigneesTab = this.consigneesTab.map((el: any, ind: number) => {
       return i === ind;
     });
   }
 
   addConsigneeTab(): void {
     this.consigneesTab.push(false);
-    this.consigneesTab = this.consigneesTab.map((el, ind) => {
+    this.consigneesTab = this.consigneesTab.map((el: any, ind: number) => {
       return ind === this.consigneesTab.length - 1;
     });
     this.load.consignee.push({
@@ -908,6 +951,10 @@ www.wellsbrothersnv.com
         }
         this.sharedService.setLoader(false);
       });
+  }
+
+  getMailSubject(): string {
+    return `Invoice for load #${this.load.num}`
   }
 
   openModalAddSheeper(): void {

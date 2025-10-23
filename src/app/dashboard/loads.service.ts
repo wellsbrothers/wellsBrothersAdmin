@@ -181,8 +181,9 @@ export class LoadsService {
 
   sendMail(data: {
     load_id: number,
-    message: string,
+    message: string | undefined,
     email: string,
+    subject: string,
     cc_email: string[] | []
   }) {
     const headers = new HttpHeaders({ token: localStorage.getItem('token')! });

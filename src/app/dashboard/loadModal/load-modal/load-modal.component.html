@@ -1438,7 +1438,14 @@
             <form #f="ngForm" (ngSubmit)="onSendMail(f)">
               <div class="header-row">
                 <div class="modal-header">
-                  Invoice for load #{{ this.load.num }}
+                  <input
+                    [value]="getMailSubject()"
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    name="name"
+                    [(ngModel)]="mailSubject"
+                  />
                 </div>
 
                 <div class="mail-field pr-3">
