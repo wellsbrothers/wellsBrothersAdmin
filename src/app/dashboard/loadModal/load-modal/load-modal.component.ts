@@ -288,6 +288,9 @@ www.wellsbrothersnv.com
       }
       this.sharedService.setLoader(false);
       this.mailingModalShow = false;
+
+      this.load.invoice.bool = true;
+      this.createLoad();
     })
   }
 
