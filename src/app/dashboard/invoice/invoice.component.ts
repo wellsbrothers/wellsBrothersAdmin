@@ -10,7 +10,6 @@ import { SettingsService } from '../../admin/settings/settings.service';
 export class InvoiceComponent implements OnInit {
 
   @Input() load: any;
-  // @Input() date: Date;
 
   private _date: Date | string | undefined;
 
@@ -28,7 +27,6 @@ export class InvoiceComponent implements OnInit {
       this.dueDate = plus30Days;
     } else {
       this._date = value;
-      this.dueDate
     }
   }
 
