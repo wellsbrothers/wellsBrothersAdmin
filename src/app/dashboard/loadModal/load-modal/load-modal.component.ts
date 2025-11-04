@@ -34,6 +34,7 @@ export class LoadModalComponent implements OnInit {
   addConsigneeModal: boolean;
   addCarrier: boolean;
   errorMessageCreate: boolean;
+  includeInvoiceFile: boolean = true;
 
   load: any = {};
   validationLoad: any;
@@ -279,6 +280,7 @@ www.wellsbrothersnv.com
       message: this.defaultMailText,
       email: this.mailTo,
       subject: this.mailSubject,
+      include_invoice_file: this.includeInvoiceFile,
       cc_email: this.ccEmails
         .map(cc => cc.email)        // extract the email strings
         .filter(email => email),    // remove empty entries // remove empty
@@ -290,6 +292,7 @@ www.wellsbrothersnv.com
       this.mailingModalShow = false;
 
       this.load.invoice.bool = true;
+      this.includeInvoiceFile = true;
       this.createLoad();
     })
   }

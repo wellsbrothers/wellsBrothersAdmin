@@ -184,7 +184,8 @@ export class LoadsService {
     message: string | undefined,
     email: string,
     subject: string,
-    cc_email: string[] | []
+    cc_email: string[] | [],
+    include_invoice_file: boolean
   }) {
     const headers = new HttpHeaders({ token: localStorage.getItem('token')! });
 

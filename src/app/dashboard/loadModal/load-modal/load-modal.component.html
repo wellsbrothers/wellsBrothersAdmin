@@ -1534,7 +1534,13 @@
               <div class="modal-header text-center w-100">Invoice</div>
               <!-- PDF Viewers -->
               <div class="d-flex mt-3 w-100">
-                <div>
+                <div class="mr-2" *ngIf="includeInvoiceFile">
+                  <div class="w-100 d-flex justify-content-end">
+                    <button class="btn btn-danger mr-3" (click)="includeInvoiceFile = false">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+
                   <div (click)="openPDFInvoice()">
                     <pdf-viewer
                       *ngIf="invoicePDF"
